@@ -58,7 +58,7 @@ void **readFile(char *filename, int col) {
 	for (i = j = 0; c != EOF; j++) {
 		c = getc(file);
 		/* se nao for espaço nem newline, escreve no buffer */
-        if (c != ' ' && c != '\n') {
+        if (c != ' ' && c != '\n' && c != EOF && c != '\r') {
             buf[i] = c;
 			cur_word_size++;
 			i++;
@@ -67,6 +67,10 @@ void **readFile(char *filename, int col) {
         else {
 			buf[i] = '\0'; /* fecha o buffer como string */
 
+			if (c == prev && prev == '\n') { /* fim do paragrafo, sem ideias ainda */
+				continue;
+			}
+			
 			/* se ultrapassou o limite de colunas */
 			if (j > col) {
 				/* define os espaços a serem printados nessa linha */
@@ -98,19 +102,23 @@ void **readFile(char *filename, int col) {
             }
 
 			else {
-				strcpy(words[word_count], buf); /* da segfault aqui uma hora e nao sei porque D: */
+				strcpy(words[word_count], buf);
 				word_count++;
 			}
 
-            if (c == prev && prev == '\n') { /* fim do paragrafo, sem ideias ainda */
-				continue;
-            }
 			buf[0] = '\0'; /* reseta o buffer */
 			i = 0;
 			cur_word_size = 0;
         }
         prev = c;
 	}
+	/* escreve a ultima linha i guess */
+	for (i = 0; i < word_count - 1; i++)
+		spaces[i] = 1;
+	spaces[word_count - 1] = 0;
+	write(words, spaces, word_count);
+
+
 	/* destroi tudo */
 	for (i = 0; i < col/2; i++)
 		free(words[i]);
