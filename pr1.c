@@ -6,7 +6,7 @@
 
 /* recebe as palavras a serem escritas, o vetor de espaços a serem inseridos
 // entre elas e o numero de palavras, e escreve uma linha */
-void write(char **words, int *spaces, int word_count) {
+void write(char **words, int spaces[], int word_count) {
 	int i, j;
 	for (i = 0; i < word_count; i++) {
 		printf("%s", words[i]);
@@ -27,7 +27,7 @@ void **readFile(char *filename, int col) {
     char prev;
 	char *buf; /* buffer para palavra */
 	int cur_word_size; /* vetor com tamanho das palavras da linha para usar na formula */
-    int *spaces; /* vetor com espaços a serem inseridos entre cada palavra.
+    int spaces[col/2]; /* vetor com espaços a serem inseridos entre cada palavra.
 	 			/// tamanho do vetor é num de palavras - 1*/
 	char **words; /* buffer para as linhas */
 
@@ -43,7 +43,6 @@ void **readFile(char *filename, int col) {
 
 	/* aloca tudo */
 	/* col/2 é o maximo numero de palavras que podemos ter em uma linha */
-	spaces = malloc((col/2)*sizeof(int));
 	words = malloc((col/2)*sizeof(char*));
 	buf = malloc(MAX_WORD_SIZE*sizeof(char));
 	for (i = 0; i < col/2; i++){
@@ -116,7 +115,6 @@ void **readFile(char *filename, int col) {
 	for (i = 0; i < col/2; i++)
 		free(words[i]);
 	free(words);
-	free(spaces);
 	free(buf);
 	fclose(file);
 	return 0;
