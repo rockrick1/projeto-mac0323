@@ -87,20 +87,21 @@ void **readFile(char *filename, int col) {
 				/* escreve as parada */
                 write(words, spaces, word_count);
 
-				/* reseta td */
+				/* reseta spaces e words */
 				for (k = 0; k < col; k++)
                 	spaces[k] = 1;
 				for (k = 0; k < word_count; k++) {
 					strcpy(words[k], "");
 				}
+				/* copia a palavra que excedeu o limite */
 				strcpy(words[0], buf);
 				j = cur_word_size;
-                word_count = 1;
+				if (j == 0) word_count = 0;
+				else word_count = 1;
             }
 
 			else {
 				strcpy(words[word_count], buf); /* da segfault aqui uma hora e nao sei porque D: */
-				printf("%s\n", buf);
 				word_count++;
 			}
 
