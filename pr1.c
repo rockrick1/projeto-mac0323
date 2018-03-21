@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_WORD_SIZE 100
+
 /* recebe as palavras a serem escritas, o vetor de espaços a serem inseridos
 // entre elas e o numero de palavras, e escreve uma linha */
 void write(char **words, int *spaces, int word_count) {
@@ -29,7 +31,6 @@ void **readFile(char *filename, int col) {
 	 			/// tamanho do vetor é num de palavras - 1*/
 	char **words; /* buffer para as linhas */
 
-	int max_words; /* para alocação */
 	FILE *file;
 
 	/* abre o arquivo */
@@ -40,23 +41,20 @@ void **readFile(char *filename, int col) {
 		return NULL;
 	}
 
-	max_words = 40; /* maximo de palavras numa linha */
-
 	/* aloca tudo */
-	spaces = malloc(col*sizeof(int));
-	words = malloc(sizeof(char**));
-	buf = malloc(50*sizeof(char));
-	for (i = 0; i < max_words; i++){
-		words[i] = malloc(30*sizeof(char));
+	/* col/2 é o maximo numero de palavras que podemos ter em uma linha */
+	spaces = malloc((col/2)*sizeof(int));
+	words = malloc((col/2)*sizeof(char*));
+	buf = malloc(MAX_WORD_SIZE*sizeof(char));
+	for (i = 0; i < col/2; i++){
+		words[i] = malloc(MAX_WORD_SIZE*sizeof(char));
+		spaces[i] = 1;
 		strcpy(words[i], "");
 	}
 
-	prev = '\0'; /* esse char define o final de uma string!!! */
+	prev = '\0';
 	word_count = 0;
 	cur_word_size = 0;
-	for (k = 0; k < col; k++)
-		spaces[k] = 1;
-
 
 	for (i = j = 0; c != EOF; j++) {
 		c = getc(file);
@@ -68,7 +66,7 @@ void **readFile(char *filename, int col) {
         }
 		/* se nao for, faz varias coisas */
         else {
-			buf[i] = '\0';
+			buf[i] = '\0'; /* fecha o buffer como string */
 
 			/* se ultrapassou o limite de colunas */
 			if (j > col) {
@@ -88,7 +86,7 @@ void **readFile(char *filename, int col) {
                 write(words, spaces, word_count);
 
 				/* reseta spaces e words */
-				for (k = 0; k < col; k++)
+				for (k = 0; k < col/2; k++)
                 	spaces[k] = 1;
 				for (k = 0; k < word_count; k++) {
 					strcpy(words[k], "");
@@ -115,7 +113,7 @@ void **readFile(char *filename, int col) {
         prev = c;
 	}
 	/* destroi tudo */
-	for (i = 0; i < max_words; i++)
+	for (i = 0; i < col/2; i++)
 		free(words[i]);
 	free(words);
 	free(spaces);
