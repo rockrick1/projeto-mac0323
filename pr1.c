@@ -58,7 +58,7 @@ void **readFile(char *filename, int col) {
 	for (i = j = 0; c != EOF; j++) {
 		c = getc(file);
 		/* se nao for espaço nem newline, escreve no buffer */
-        if (c != ' ' && c != '\n' && c != EOF && c != '\r') {
+        if (c != ' ' && c != '\n' && c != EOF && c != '\r' && c != '\t') {
             buf[i] = c;
 			cur_word_size++;
 			i++;
