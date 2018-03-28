@@ -20,7 +20,7 @@ void write(char **words, int spaces[], int word_count) {
 
 /* le um arquivo e printa o texto justificado em col colunas */
 void **readFile(char *filename, int col) {
-	int i, j, k, p, EOL_count;
+	int i, j, k, p, EOL_count, ok;
 	int word_count; /* quantidade de palavras na linha ate agora. reseta toda linha */
 	int excess; /* espaços em excesso no final da iteração */
 	char c;
@@ -49,12 +49,13 @@ void **readFile(char *filename, int col) {
 		strcpy(words[i], "");
 	}
 
+	ok = 0;
 	EOL_count = 0;
 	word_count = 0;
 	cur_word_size = 0;
 
 	c = getc(file);
-	for (i = j = 0; c != EOF; j++) {
+	for (i = j = 0; ok == 0; j++) {
 		if (c != ' ' && c != '\n' && c != EOF && c != '\r' && c != '\t') {
 			buf[i] = c;
 			cur_word_size++;
@@ -65,14 +66,14 @@ void **readFile(char *filename, int col) {
 		else {
 			buf[i] = '\0'; /* fecha o buffer como string */
 
-			while (c == ' ' || c == '\n' || c == EOF || c == '\r' || c == '\t') {
+			while (c == ' ' || c == '\n' || c == '\r' || c == '\t') {
 				if (c == '\n')
 					EOL_count++;
 				c = getc(file);
 			}
 
-			if (EOL_count >= 2 || j > col) {
-				if (j <= col) { /* apenas excedeu EOL */
+			if (EOL_count >= 2 || j > col || c == EOF) {
+				if (j <= col) { /* apenas excedeu EOL, ou chegou em EOF */
 					/* copia a ultima palavra */
 					strcpy(words[word_count], buf);
 					word_count++;
@@ -83,8 +84,11 @@ void **readFile(char *filename, int col) {
 					spaces[word_count - 1] = 0;
 					write(words, spaces, word_count);
 					printf("\n");
+					for (k = 0; k < col/2; k++)
+						spaces[k] = 1;
 					word_count = 0;
 					j = -1;
+					if (c == EOF) ok = 1;
 				}
 				else if (j > col) { /* apenas excedeu col */
 					/* define os espaços a serem printados nessa linha */
@@ -137,15 +141,6 @@ void **readFile(char *filename, int col) {
 			EOL_count = 0;
 		}
 	}
-
-	/* escreve a ultima linha i guess */
-	buf[i] = '\0';
-	strcpy(words[word_count], buf);
-	word_count++;
-	for (i = 0; i < word_count - 1; i++)
-		spaces[i] = 1;
-	spaces[word_count - 1] = 0;
-	write(words, spaces, word_count);
 
 
 	/* destroi tudo */
