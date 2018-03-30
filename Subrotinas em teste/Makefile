@@ -1,6 +1,14 @@
 make:
 	clear
 
+.PHONY: printf
+printf:
+	./macas scan.as
+	./macas	printf.as
+	./macas	tprintf.as
+	./maclk printf.mac tprintf.maco scan.maco printf.maco
+	./macsim printf.mac
+
 .PHONY: scan
 scan:
 	./macas scan.as
@@ -20,3 +28,4 @@ print:
 clean:
 	rm -rf *.mac
 	rm -rf *.maco
+	clear
