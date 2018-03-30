@@ -1,6 +1,15 @@
 make:
 	clear
 
+.PHONY: scanf
+scanf:
+	./macas scan.as
+	./macas scanf.as
+	./macas	printf.as
+	./macas	tscanf.as
+	./maclk scanf.mac tscanf.maco scan.maco scanf.maco printf.maco
+	./macsim scanf.mac
+
 .PHONY: printf
 printf:
 	./macas scan.as
