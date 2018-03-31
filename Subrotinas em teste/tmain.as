@@ -3,10 +3,14 @@
 col		IS		$49
 nwords	IS		$50
 
-main	SUBU	rX,rSP,16
-		LDOU	rX,rX,0
-		PUSH	rX
-		CALL	print
+main	SUBU	col,rSP,16
+		LDOU	col,col,0
+
+		PUSH	col
+		CALL	toint
+		ADDU	col,rA,0
+
+		INT		#DB3131
 
 		SETW	$100,0
 

@@ -5,8 +5,9 @@ make:
 main:
 	./macas tmain.as
 	./macas print.as
-	./maclk main.mac tmain.maco print.maco
-	./macsim main.mac 3
+	./macas	toint.as
+	./maclk main.mac tmain.maco print.maco toint.maco
+	./macsim main.mac 23
 
 .PHONY: toint
 toint:
