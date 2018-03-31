@@ -8,6 +8,15 @@ main:
 	./maclk main.mac tmain.maco print.maco
 	./macsim main.mac 3
 
+.PHONY: memcopy
+memcopy:
+	./macas memcopy.as
+	./macas scan.as
+	./macas print.as
+	./macas tmemcopy.as
+	./maclk tmemcopy.mac memcopy.maco scan.maco print.maco tmemcopy.maco
+	./macsim tmemcopy.mac
+
 .PHONY: scanf
 scanf:
 	./macas scan.as
