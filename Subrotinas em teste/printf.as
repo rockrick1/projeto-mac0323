@@ -6,6 +6,7 @@ printf	SUBU	s,rSP,16
 		LDOU	s,s,0
 		LDOU	f,f,0
 		SETW	rX,2
+		SUBU	f,f,s
 		SUBU	f,f,1
 write	LDB		rY,s,0
 		JN		f,end

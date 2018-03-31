@@ -49,6 +49,7 @@ get		PUSH	wstart
 
 		ADDU	nwords,nwords,1
 		ADDU	wstart,wend,0
+
 		JMP 	get
 		
 spaces	JMP write
@@ -63,8 +64,6 @@ write	MUL		t,wcount,16
 		SETW	mem,50000
 		ADDU	mem,mem,t
 		PUSH	mem
-
-		INT		#DB0101
 
 		CALL 	printf
 
