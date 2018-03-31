@@ -1,6 +1,12 @@
 make:
 	clear
 
+.PHONY: main
+main:
+	./macas tmain.as 
+	./maclk main.mac tmain.maco 
+	./macsim main.mac 3
+
 .PHONY: scanf
 scanf:
 	./macas scan.as
