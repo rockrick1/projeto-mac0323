@@ -5,9 +5,13 @@ make:
 main:
 	./macas tmain.as
 	./macas print.as
+	./macas printf.as
 	./macas	toint.as
-	./maclk main.mac tmain.maco print.maco toint.maco
-	./macsim main.mac 23
+	./macas scan.as
+	./macas scanf.as
+	./macas	memcopy.as
+	./maclk main.mac tmain.maco print.maco printf.maco toint.maco scan.maco scanf.maco memcopy.maco
+	./macsim main.mac 40
 
 .PHONY: toint
 toint:
