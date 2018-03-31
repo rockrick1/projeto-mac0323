@@ -8,6 +8,14 @@ main:
 	./maclk main.mac tmain.maco print.maco
 	./macsim main.mac 3
 
+.PHONY: toint
+toint:
+	./macas toint.as
+	./macas scan.as
+	./macas	ttoint.as
+	./maclk toint.mac toint.maco scan.maco ttoint.maco
+	./macsim toint.mac
+
 .PHONY: memcopy
 memcopy:
 	./macas memcopy.as
