@@ -3,8 +3,9 @@ make:
 
 .PHONY: main
 main:
-	./macas tmain.as 
-	./maclk main.mac tmain.maco 
+	./macas tmain.as
+	./macas print.as
+	./maclk main.mac tmain.maco print.maco
 	./macsim main.mac 3
 
 .PHONY: scanf
