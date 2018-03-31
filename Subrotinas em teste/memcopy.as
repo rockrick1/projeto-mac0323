@@ -25,4 +25,5 @@ copy	SUBU	until,until,1
 
 		JMP 	copy
 
-end		RET		3
+end		ADDU	rA,to,0
+		RET		3

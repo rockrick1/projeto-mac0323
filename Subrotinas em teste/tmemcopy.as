@@ -35,6 +35,7 @@ main	SETW	$100,0
 		PUSH	$101
 		PUSH	$100
 		CALL	memcopy
+		ADDU	$103,rA,0
 
 		PUSH 	$100
 		CALL	print
@@ -49,5 +50,7 @@ main	SETW	$100,0
 		SETW	rX,2
 		SETW	rY,10
 		INT		#80
+
+		INT		#DB6467
 
 		INT		0
