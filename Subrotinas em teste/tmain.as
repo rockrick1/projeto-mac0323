@@ -63,7 +63,7 @@ cont	ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
 		ADDU	wstart,wend,0	  *pega a proxima palavra depois da atual
 
 		JMP 	get
-		
+
 
 ignora	JP      nwords,spaces	*se tem alguma palavra antes, imprime elas
 		PUSH	wend			*imprime a palavra e passa para a proxima
@@ -81,6 +81,7 @@ parag	ADDU	$3,wend,1		*São dois \n seguidos?
 		SETW	twoline,1		*São, termina a linha aqui e imprima um \n
 		ADDU	nwords,nwords,1	  
 		ADDU	wstart,wend,0
+		JMP		last			*Ultima linha do paragrafo
 
 spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		SUBU 	t,t,1
@@ -211,6 +212,8 @@ tlast	MUL		t,wcount,16			*A ultima palavra, não coloque um espaço no final
 		PUSH	mem
 
 		CALL 	printf
+
+		JP 		twoline,newline 	*Era a ultima linha do paragrafo, não do texto
 
 end		SETW	rX,2
 		SETW	rY,10
