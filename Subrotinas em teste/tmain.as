@@ -50,8 +50,7 @@ get		PUSH	wstart
 		SUBU	current,current,t
 		JN		current,spaces 
 		SUBU	current,current,1
-		JN		current,spaces
-
+		
 		ADDU	nwords,nwords,1
 		ADDU	wstart,wend,0
 
