@@ -30,7 +30,6 @@ get		PUSH	wstart
 		ADDU	wstart,$99,0
 		ADDU	wend,rA,0
 
-
 		MUL		t,nwords,100
 		SETW	mem,50000
 		ADDU	mem,mem,t
@@ -58,7 +57,8 @@ get		PUSH	wstart
 
 		JMP 	get
 
-ignora	PUSH	wend
+ignora	JP      nwords,spaces
+		PUSH	wend
 		PUSH 	wstart
 		CALL	printf
 		ADDU	wstart,wend,0
