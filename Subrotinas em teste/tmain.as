@@ -1,14 +1,14 @@
 		EXTERN	main
 
-t 		IS 		$0
-mem		IS		$1
-col		IS		$49
-nwords	IS		$50
+t 		IS 		$0		*literalmente tudo
+mem		IS		$1		
+col		IS		$49		*numero de colunas pra justificar
+nwords	IS		$50		*numero de palavras por linha
 current	IS		$51
 wstart	IS		$52
 wend	IS		$53
 wcount	IS		$54
-scount	IS		$55
+scount	IS		$55		*conta os espacos por linha
 
 main	SUBU	col,rSP,16
 		LDOU	col,col,0
@@ -64,7 +64,7 @@ ignora	JP      nwords,spaces
 		ADDU	wstart,wend,0
 		JMP		newline
 		
-spaces	SUBU	t,nwords,scount
+spaces	SUBU	t,nwords,scount		*atualmente, isso começa como 0
 		SUBU 	t,t,1
 		JNP		t,remain
 
