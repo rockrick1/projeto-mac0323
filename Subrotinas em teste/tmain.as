@@ -9,6 +9,8 @@ wstart	IS		$52		*marca o inicio da palavra atual
 wend	IS		$53		*marca o fim da palavra atual
 wcount	IS		$54		*"int i" para fazer while ( i < nwords)
 scount	IS		$55		*conta os espacos por linha
+neol	IS		$56		*numero de \n's no final da palavra
+excess	IS		$57		*numero de espaços que sobrou no final da linha
 
 main	SUBU	col,rSP,16	*pega argumento
 		LDOU	col,col,0
@@ -50,7 +52,7 @@ get		PUSH	wstart			*pega a proxima palavra
 		SUBU	current,current,t *subtrai o tamanho da palavra dos espaços que faltam
 		JN		current,spaces 	  *deu certinho ou passou?
 		SUBU	current,current,1 *adiciona pelo menos um espaço então
-		
+
 		ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
 		ADDU	wstart,wend,0	  *pega a proxima palavra depois da atual
 
@@ -62,7 +64,7 @@ ignora	JP      nwords,spaces	*se tem alguma palavra antes, imprime elas
 		CALL	printf
 		ADDU	wstart,wend,0
 		JMP		newline
-		
+
 spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		SUBU 	t,t,1
 		JNP		t,remain
@@ -76,11 +78,28 @@ spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 
 		ADDU	mem,mem,1			*Atualiza Ponteiro
 		STW 	mem,t,0
-		
+
 		ADDU 	scount,scount,1		*Colocamos o espaço em mais uma palavra
 		JMP 	spaces
 
-remain	JMP 	write				*deveria colocar o resto dos espaços
+remain	SUBU 	t,wend,wstart		*tamanho da palavra
+		ADDU	current,current,t	*adiciona o tamanho da palavra passada
+		ADDU	current,current,1	*numero de espaços a serem adicionados
+
+check	MUL		t,scount,16			*Adiciona um espaço no fim da palavra
+		SETW	mem,40000
+		ADDU	t,mem,t
+		LDWU	mem,t,0
+		SETW	$3,32
+		STB		$3,mem,0
+
+		ADDU	mem,mem,1			*Atualiza Ponteiro
+		STW 	mem,t,0
+
+		ADDU 	scount,scount,1		*Colocamos o espaço em mais uma palavra
+		SUBU	current,current,1
+		JP		current,check
+
 
 write	MUL		t,wcount,16			*Pega o fim da palavra, empilha
 		SETW	mem,40000
