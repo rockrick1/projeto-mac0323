@@ -12,7 +12,7 @@ main:
 	./macas	memcopy.as
 	./maclk main.mac tmain.maco print.maco printf.maco toint.maco scan.maco scanf.maco memcopy.maco
 	./macsim main.mac 40
-
+ 
 .PHONY: toint
 toint:
 	./macas toint.as

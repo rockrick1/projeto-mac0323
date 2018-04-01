@@ -30,11 +30,6 @@ get		PUSH	wstart
 		ADDU	wstart,$99,0
 		ADDU	wend,rA,0
 
-		SUBU 	t,wend,wstart
-		JNP  	t,last
-		ADDU	t,t,1
-		SUBU	current,current,t
-		JNP		current,spaces
 
 		MUL		t,nwords,100
 		SETW	mem,50000
@@ -49,10 +44,25 @@ get		PUSH	wstart
 		ADDU	mem,mem,t
 		STW 	rA,mem,0
 
+		SUBU 	t,wend,wstart
+		JNP  	t,last
+		SUBU	$3,col,t
+		JNP 	$3,ignora
+		SUBU	current,current,t
+		JN		current,spaces 
+		SUBU	current,current,1
+		JN		current,spaces
+
 		ADDU	nwords,nwords,1
 		ADDU	wstart,wend,0
 
 		JMP 	get
+
+ignora	PUSH	wend
+		PUSH 	wstart
+		CALL	printf
+		ADDU	wstart,wend,0
+		JMP		newline
 		
 spaces	SUBU	t,nwords,scount
 		SUBU 	t,t,1
@@ -68,10 +78,10 @@ spaces	SUBU	t,nwords,scount
 		ADDU	mem,mem,1
 		STW 	mem,t,0
 		
-		ADDU scount,scount,1
-		JMP spaces
+		ADDU 	scount,scount,1
+		JMP 	spaces
 
-remain	JMP write
+remain	JMP 	write
 
 write	MUL		t,wcount,16
 		SETW	mem,40000
@@ -109,7 +119,7 @@ clear	JNP		wcount,newline
 
 		SUBU	wcount,wcount,1
 
-		JMP clear
+		JMP 	clear
 
 newline	SETW	rX,2
 		SETW	rY,10
