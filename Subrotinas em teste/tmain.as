@@ -8,6 +8,7 @@ current	IS		$51
 wstart	IS		$52
 wend	IS		$53
 wcount	IS		$54
+scount	IS		$55
 
 main	SUBU	col,rSP,16
 		LDOU	col,col,0
@@ -53,7 +54,24 @@ get		PUSH	wstart
 
 		JMP 	get
 		
-spaces	JMP write
+spaces	SUBU	t,nwords,scount
+		SUBU 	t,t,1
+		JNP		t,remain
+
+		MUL		t,scount,16
+		SETW	mem,40000
+		ADDU	t,mem,t
+		LDWU	mem,t,0
+		SETW	$3,32
+		STB		$3,mem,0
+
+		ADDU	mem,mem,1
+		STW 	mem,t,0
+		
+		ADDU scount,scount,1
+		JMP spaces
+
+remain	JMP write
 
 write	MUL		t,wcount,16
 		SETW	mem,40000
@@ -67,10 +85,6 @@ write	MUL		t,wcount,16
 		PUSH	mem
 
 		CALL 	printf
-
-		SETW	rX,2
-		SETW	rY,32
-		INT		#80
 
 		ADDU	wcount,wcount,1
 		SUBU	t,nwords,wcount
@@ -101,6 +115,7 @@ newline	SETW	rX,2
 		SETW	rY,10
 		INT		#80
 		SETW	nwords,0
+		SETW	scount,0
 		SETW	wcount,0
 		ADDU	current,col,0
 		JMP		get
