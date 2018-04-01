@@ -121,6 +121,9 @@ newline	SETW	rX,2
 		JMP		get
 
 last	JNP		nwords,end
+		SETW	t,1
+		CMP		t,t,nwords
+		JZ		t,tlast
 
 		MUL		t,wcount,16
 		SETW	mem,40000
@@ -143,6 +146,19 @@ last	JNP		nwords,end
 		SUBU	nwords,nwords,1
 
 		JMP		last
+
+tlast	MUL		t,wcount,16
+		SETW	mem,40000
+		ADDU	mem,mem,t
+		LDWU	mem,mem,0
+		PUSH	mem
+
+		MUL		t,wcount,100
+		SETW	mem,50000
+		ADDU	mem,mem,t
+		PUSH	mem
+
+		CALL 	printf
 
 end		SETW	rX,2
 		SETW	rY,10
