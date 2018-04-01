@@ -9,8 +9,9 @@ wstart	IS		$52		*marca o inicio da palavra atual
 wend	IS		$53		*marca o fim da palavra atual
 wcount	IS		$54		*"int i" para fazer while ( i < nwords)
 scount	IS		$55		*conta os espacos por linha
-neol	IS		$56		*numero de \n's no final da palavra
-excess	IS		$57		*numero de espaços que sobrou no final da linha
+twoline	IS 		$56		*adiciona mais um \n
+neol	IS		$57		*numero de \n.s no final da palavra
+excess	IS		$58		*numero de espaços que sobrou no final da linha
 
 main	SUBU	col,rSP,16	*pega argumento
 		LDOU	col,col,0
@@ -53,10 +54,16 @@ get		PUSH	wstart			*pega a proxima palavra
 		JN		current,spaces 	  *deu certinho ou passou?
 		SUBU	current,current,1 *adiciona pelo menos um espaço então
 
-		ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
+		LDBU	$3,wend,0	*Essa palavra termina em um \n?
+		SETW	t,10
+		CMP		$3,$3,t
+		JZ		$3,parag
+
+cont	ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
 		ADDU	wstart,wend,0	  *pega a proxima palavra depois da atual
 
 		JMP 	get
+		
 
 ignora	JP      nwords,spaces	*se tem alguma palavra antes, imprime elas
 		PUSH	wend			*imprime a palavra e passa para a proxima
@@ -64,6 +71,16 @@ ignora	JP      nwords,spaces	*se tem alguma palavra antes, imprime elas
 		CALL	printf
 		ADDU	wstart,wend,0
 		JMP		newline
+
+parag	ADDU	$3,wend,1		*São dois \n seguidos?
+		LDBU	$3,$3,0
+		CMP		$3,$3,t
+
+		JNZ		$3,cont 		*Não são, continua normalmente
+
+		SETW	twoline,1		*São, termina a linha aqui e imprima um \n
+		ADDU	nwords,nwords,1	  
+		ADDU	wstart,wend,0
 
 spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		SUBU 	t,t,1
@@ -146,6 +163,13 @@ newline	SETW	rX,2				*coloca um \n
 		SETW	scount,0
 		SETW	wcount,0
 		ADDU	current,col,0
+
+		JNP		twoline,get			*É um paragrafo?
+
+		SETW	rX,2				
+		SETW	rY,10
+		INT		#80
+		SETW	twoline,0
 		JMP		get
 
 last	JNP		nwords,end 			*pula para o fim se não faltar nada
