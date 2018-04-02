@@ -11,8 +11,8 @@ main:
 	./macas scanf.as
 	./macas	memcopy.as
 	./maclk main.mac tmain.maco print.maco printf.maco toint.maco scan.maco scanf.maco memcopy.maco
-	./macsim main.mac 60
- 
+	./macsim main.mac 23
+
 .PHONY: toint
 toint:
 	./macas toint.as

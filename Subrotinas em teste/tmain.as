@@ -104,9 +104,9 @@ remain	SUBU 	t,wend,wstart		*tamanho da palavra
 		ADDU	current,current,t	*adiciona o tamanho da palavra passada
 		ADDU	current,current,1	*numero de espaços a serem adicionados
 
-final	MUL		$4,nwords,16			*começa pela penultima palavra
+final	MUL		$4,nwords,16		*começa pela penultima palavra
 		SUBU	$4,$4,16
-		JN		$4,write				*se so tiver uma, escreve (?)
+		JNP		$4,write			*se so tiver uma, escreve (?)
 
 add		SETW	mem,40000			*adiciona o espaço
 		ADDU	t,mem,$4
