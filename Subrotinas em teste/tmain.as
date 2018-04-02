@@ -10,8 +10,7 @@ wend	IS		$53		*marca o fim da palavra atual
 wcount	IS		$54		*"int i" para fazer while ( i < nwords)
 scount	IS		$55		*conta os espacos por linha
 twoline	IS 		$56		*adiciona mais um \n
-neol	IS		$57		*numero de \n.s no final da palavra
-excess	IS		$58		*numero de espaços que sobrou no final da linha
+tempcurr	IS		$57		*current temporario
 
 main	SUBU	col,rSP,16	*pega argumento
 		LDOU	col,col,0
@@ -41,8 +40,8 @@ get		PUSH	wstart			*pega a proxima palavra
 		PUSH	wstart
 		CALL	memcopy
 
-		MUL		t,nwords,16		*guarda um ponteiro para o fim dela lá nos 40000
-		SETW	mem,40000
+		MUL		t,nwords,16		*guarda um ponteiro para o fim dela lá nos 49800
+		SETW	mem,49800
 		ADDU	mem,mem,t
 		STW 	rA,mem,0
 
@@ -50,8 +49,9 @@ get		PUSH	wstart			*pega a proxima palavra
 		JNP  	t,last			*se o tamanho for 0 ou negativo, o texto acabou
 		SUBU	$3,col,t 		*vê se a palavra supera o col por si só
 		JNP 	$3,ignora
-		SUBU	current,current,t *subtrai o tamanho da palavra dos espaços que faltam
-		JN		current,spaces 	  *deu certinho ou passou?
+		SUBU	tempcurr,current,t *subtrai o tamanho da palavra dos espaços que faltam
+		JN		tempcurr,spaces 	  *deu certinho ou passou?
+		SUBU	current,current,t
 		SUBU	current,current,1 *adiciona pelo menos um espaço então
 
 		LDBU	$3,wend,0	*Essa palavra termina em um \n?
@@ -66,6 +66,10 @@ cont	ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
 
 
 ignora	JP      nwords,spaces	*se tem alguma palavra antes, imprime elas
+		LDBU	$3,wend,0	*Essa palavra termina em um \n?
+		SETW	t,10
+		CMP		$3,$3,t
+		JZ		$3,parag
 		PUSH	wend			*imprime a palavra e passa para a proxima
 		PUSH 	wstart
 		CALL	printf
@@ -88,7 +92,7 @@ spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		JNP		t,remain
 
 		MUL		t,scount,16			*Adiciona um espaço no fim da palavra
-		SETW	mem,40000
+		SETW	mem,49800
 		ADDU	t,mem,t
 		LDWU	mem,t,0
 		SETW	$3,32
@@ -100,16 +104,12 @@ spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		ADDU 	scount,scount,1		*Colocamos o espaço em mais uma palavra
 		JMP 	spaces
 
-remain	SUBU 	t,wend,wstart		*tamanho da palavra
-		ADDU	current,current,t	*adiciona o tamanho da palavra passada
-		ADDU	current,current,1	*numero de espaços a serem adicionados
-
-final	MUL		$4,nwords,16		*começa pela penultima palavra
-		SUBU	$4,$4,16
-		JNP		$4,write			*se so tiver uma, escreve (?)
-
-add		SETW	mem,40000			*adiciona o espaço
-		ADDU	t,mem,$4
+remain	SUBU scount,nwords,2
+		ADDU current,current,1
+justif	JZ	current,write
+		MUL		t,scount,16			*Adiciona um espaço no fim da palavra
+		SETW	mem,49800
+		ADDU	t,mem,t
 		LDWU	mem,t,0
 		SETW	$3,32
 		STB		$3,mem,0
@@ -117,16 +117,15 @@ add		SETW	mem,40000			*adiciona o espaço
 		ADDU	mem,mem,1			*Atualiza Ponteiro
 		STW 	mem,t,0
 
-		SUBU	$4,$4,16
-		JN		$4,final
-
-		ADDU 	scount,scount,1		*Colocamos o espaço em mais uma palavra
-		SUBU	current,current,1
-		JNN		current,add
+		SUBU 	scount,scount,1		*Colocamos o espaço em mais uma palavra
+		SUBU	current,current,1	*Current fica menor
+		JNN		scount,justif
+		SUBU scount,nwords,2
+		JMP	justif
 
 
 write	MUL		t,wcount,16			*Pega o fim da palavra, empilha
-		SETW	mem,40000
+		SETW	mem,49800
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
@@ -143,25 +142,6 @@ write	MUL		t,wcount,16			*Pega o fim da palavra, empilha
 
 		JNP		t,newline			*Se imprimimos todas, nova linha
 		JMP 	write
-
-clear	JNP		wcount,newline		*nada, provavelmente pode ser tirado
-
-		MUL		t,wcount,100
-		SETW	mem,50000
-		ADDU	mem,mem,t
-		PUSH	mem
-
-		SETW	mem,30100
-		PUSH	mem
-
-		SETW	mem,30000
-		PUSH	mem
-
-		CALL	memcopy
-
-		SUBU	wcount,wcount,1
-
-		JMP 	clear
 
 newline	SETW	rX,2				*coloca um \n
 		SETW	rY,10
@@ -185,7 +165,7 @@ last	JNP		nwords,end 			*pula para o fim se não faltar nada
 		JZ		t,tlast
 
 		MUL		t,wcount,16			*Empilha o fim da palavra
-		SETW	mem,40000
+		SETW	mem,49800
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
@@ -207,7 +187,7 @@ last	JNP		nwords,end 			*pula para o fim se não faltar nada
 		JMP		last
 
 tlast	MUL		t,wcount,16			*A ultima palavra, não coloque um espaço no final
-		SETW	mem,40000
+		SETW	mem,49800
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
