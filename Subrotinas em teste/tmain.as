@@ -79,7 +79,7 @@ parag	ADDU	$3,wend,1		*São dois \n seguidos?
 		JNZ		$3,cont 		*Não são, continua normalmente
 
 		SETW	twoline,1		*São, termina a linha aqui e imprima um \n
-		ADDU	nwords,nwords,1	  
+		ADDU	nwords,nwords,1
 		ADDU	wstart,wend,0
 		JMP		last			*Ultima linha do paragrafo
 
@@ -104,9 +104,12 @@ remain	SUBU 	t,wend,wstart		*tamanho da palavra
 		ADDU	current,current,t	*adiciona o tamanho da palavra passada
 		ADDU	current,current,1	*numero de espaços a serem adicionados
 
-check	MUL		t,scount,16			*Adiciona um espaço no fim da palavra
-		SETW	mem,40000
-		ADDU	t,mem,t
+final	MUL		$4,nwords,16			*começa pela penultima palavra
+		SUBU	$4,$4,16
+		JN		$4,write				*se so tiver uma, escreve (?)
+
+add		SETW	mem,40000			*adiciona o espaço
+		ADDU	t,mem,$4
 		LDWU	mem,t,0
 		SETW	$3,32
 		STB		$3,mem,0
@@ -114,9 +117,12 @@ check	MUL		t,scount,16			*Adiciona um espaço no fim da palavra
 		ADDU	mem,mem,1			*Atualiza Ponteiro
 		STW 	mem,t,0
 
+		SUBU	$4,$4,16
+		JN		$4,final
+
 		ADDU 	scount,scount,1		*Colocamos o espaço em mais uma palavra
 		SUBU	current,current,1
-		JP		current,check
+		JNN		current,add
 
 
 write	MUL		t,wcount,16			*Pega o fim da palavra, empilha
@@ -167,7 +173,7 @@ newline	SETW	rX,2				*coloca um \n
 
 		JNP		twoline,get			*É um paragrafo?
 
-		SETW	rX,2				
+		SETW	rX,2
 		SETW	rY,10
 		INT		#80
 		SETW	twoline,0
