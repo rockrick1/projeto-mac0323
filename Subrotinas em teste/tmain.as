@@ -33,16 +33,16 @@ get		PUSH	wstart			*pega a proxima palavra
 		ADDU	wstart,$99,0	*guarda o começo e fim dela
 		ADDU	wend,rA,0
 
-		MUL		t,nwords,50	*copia ela lá para os 6000 da memoria
-		SETW	mem,6000
+		MUL		t,nwords,50	*copia ela lá para os 60000 da memoria
+		SETW	mem,60000
 		ADDU	mem,mem,t
 		PUSH	mem
 		PUSH	wend
 		PUSH	wstart
 		CALL	memcopy
 
-		MUL		t,nwords,16		*guarda um ponteiro para o fim dela lá nos 3000
-		SETW	mem,3000
+		MUL		t,nwords,16		*guarda um ponteiro para o fim dela lá nos 58000
+		SETW	mem,58000
 		ADDU	mem,mem,t
 		STW 	rA,mem,0
 
@@ -60,7 +60,7 @@ get		PUSH	wstart			*pega a proxima palavra
 		CMP		$3,$3,t
 		JZ		$3,parag
 
-cont	ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
+getcont	ADDU	nwords,nwords,1	  *aumenta quantas palavras temos na linha
 		ADDU	wstart,wend,0	  *pega a proxima palavra depois da atual
 
 		JMP 	get
@@ -70,7 +70,13 @@ ignora	JP      nwords,spaces	*se tem alguma palavra antes, imprime elas
 		LDBU	$3,wend,0	*Essa palavra termina em um \n?
 		SETW	t,10
 		CMP		$3,$3,t
-		PUSH	wend			*imprime a palavra e passa para a proxima
+		JNZ		$3,igcont 		*Não, continua normalmente
+		ADDU	$3,wend,1		*São dois \n seguidos?
+		LDBU	$3,$3,0
+		CMP		$3,$3,t
+		JNZ		$3,igcont 		*Não são, continua normalmente
+		SETW	twoline,1		*São, termina a linha aqui e imprima um \n
+igcont		PUSH	wend			*imprime a palavra e passa para a proxima
 		PUSH 	wstart
 		CALL	printf
 		ADDU	wstart,wend,0
@@ -80,7 +86,7 @@ parag	ADDU	$3,wend,1		*São dois \n seguidos?
 		LDBU	$3,$3,0
 		CMP		$3,$3,t
 
-		JNZ		$3,cont 		*Não são, continua normalmente
+		JNZ		$3,getcont 		*Não são, continua normalmente
 
 		SETW	twoline,1		*São, termina a linha aqui e imprima um \n
 		ADDU	nwords,nwords,1
@@ -92,7 +98,7 @@ spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		JNP		t,remain
 
 		MUL		t,scount,16			*Adiciona um espaço no fim da palavra
-		SETW	mem,3000
+		SETW	mem,58000
 		ADDU	t,mem,t
 		LDWU	mem,t,0
 		SETW	$3,32
@@ -108,7 +114,7 @@ remain	SUBU 	scount,nwords,2
 		ADDU 	current,current,1
 justif	JZ		current,write
 		MUL		t,scount,16			*Adiciona um espaço no fim da palavra
-		SETW	mem,3000
+		SETW	mem,58000
 		ADDU	t,mem,t
 		LDWU	mem,t,0
 		SETW	$3,32
@@ -125,13 +131,13 @@ justif	JZ		current,write
 
 
 write	MUL		t,wcount,16			*Pega o fim da palavra, empilha
-		SETW	mem,3000
+		SETW	mem,58000
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
 
 		MUL		t,wcount,50		*Pega o começo da palavra, empilha
-		SETW	mem,6000
+		SETW	mem,60000
 		ADDU	mem,mem,t
 		PUSH	mem
 
@@ -165,13 +171,13 @@ last	JNP		nwords,end 			*pula para o fim se não faltar nada
 		JZ		t,tlast
 
 		MUL		t,wcount,16			*Empilha o fim da palavra
-		SETW	mem,3000
+		SETW	mem,58000
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
 
 		MUL		t,wcount,50		*Empilha o começo da palavra
-		SETW	mem,6000
+		SETW	mem,60000
 		ADDU	mem,mem,t
 		PUSH	mem
 
@@ -187,13 +193,13 @@ last	JNP		nwords,end 			*pula para o fim se não faltar nada
 		JMP		last
 
 tlast	MUL		t,wcount,16			*A ultima palavra, não coloque um espaço no final
-		SETW	mem,3000
+		SETW	mem,58000
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
 
 		MUL		t,wcount,50
-		SETW	mem,6000
+		SETW	mem,60000
 		ADDU	mem,mem,t
 		PUSH	mem
 
