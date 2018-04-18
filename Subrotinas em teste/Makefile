@@ -4,14 +4,13 @@ make:
 .PHONY: main
 main:
 	./macas tmain.as
-	./macas print.as
 	./macas printf.as
 	./macas	toint.as
 	./macas scan.as
 	./macas scanf.as
 	./macas	memcopy.as
-	./maclk main.mac tmain.maco print.maco printf.maco toint.maco scan.maco scanf.maco memcopy.maco
-	./macsim main.mac 23
+	./maclk main.mac tmain.maco printf.maco toint.maco scan.maco scanf.maco memcopy.maco
+	./macsim main.mac 200
 
 .PHONY: toint
 toint:

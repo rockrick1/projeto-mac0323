@@ -41,8 +41,8 @@ get		PUSH	wstart			*pega a proxima palavra
 		PUSH	wstart
 		CALL	memcopy
 
-		MUL		t,nwords,16		*guarda um ponteiro para o fim dela lá nos 58000
-		SETW	mem,58000
+		MUL		t,nwords,16		*guarda um ponteiro para o fim dela lá nos 50000
+		SETW	mem,50000
 		ADDU	mem,mem,t
 		STW 	rA,mem,0
 
@@ -98,7 +98,7 @@ spaces	SUBU	t,nwords,scount		*Já adicionamos pelo menos um espaço por palavra?
 		JNP		t,remain
 
 		MUL		t,scount,16			*Adiciona um espaço no fim da palavra
-		SETW	mem,58000
+		SETW	mem,50000
 		ADDU	t,mem,t
 		LDWU	mem,t,0
 		SETW	$3,32
@@ -114,7 +114,7 @@ remain	SUBU 	scount,nwords,2
 		ADDU 	current,current,1
 justif	JZ		current,write
 		MUL		t,scount,16			*Adiciona um espaço no fim da palavra
-		SETW	mem,58000
+		SETW	mem,50000
 		ADDU	t,mem,t
 		LDWU	mem,t,0
 		SETW	$3,32
@@ -131,7 +131,7 @@ justif	JZ		current,write
 
 
 write	MUL		t,wcount,16			*Pega o fim da palavra, empilha
-		SETW	mem,58000
+		SETW	mem,50000
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
@@ -171,7 +171,7 @@ last	JNP		nwords,end 			*pula para o fim se não faltar nada
 		JZ		t,tlast
 
 		MUL		t,wcount,16			*Empilha o fim da palavra
-		SETW	mem,58000
+		SETW	mem,50000
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
@@ -193,7 +193,7 @@ last	JNP		nwords,end 			*pula para o fim se não faltar nada
 		JMP		last
 
 tlast	MUL		t,wcount,16			*A ultima palavra, não coloque um espaço no final
-		SETW	mem,58000
+		SETW	mem,50000
 		ADDU	mem,mem,t
 		LDWU	mem,mem,0
 		PUSH	mem
