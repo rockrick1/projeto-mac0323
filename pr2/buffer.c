@@ -68,10 +68,19 @@ void *buffer_push_back(Buffer *B) {
   if end-of-file is reached before any characters are read.
 */
 int read_line(FILE *input, Buffer *B) {
+    int n = 0;
+    buffer_reset(B);
+
     char c = getc(input);
-    while (c != '\n') {
-        buffer_push_char(B, c);
+    buffer_push_char(B, c);
+    n++;
+    while (c != '\n' && c != EOF) {
         c = getc(input);
+        if (c != EOF) {
+            buffer_push_char(B, c);
+            n++;
+        }
     }
-    return 0;
+    if (c == EOF) return 0;
+    return n;
 }
