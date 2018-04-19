@@ -10,8 +10,8 @@
 Buffer *buffer_create(size_t member_size) {
     Buffer *B = (Buffer*) malloc(sizeof(Buffer));
     B->member_size = member_size;
-    // B->buffer_size = ???
-    B->data = (char*) malloc(B->buffer_size * (B->member_size * sizeof(char)));
+    B->buffer_size = 2;
+    B->data = (char*) malloc(B->buffer_size * B->member_size);
     return B;
 }
 
@@ -27,7 +27,10 @@ void buffer_destroy(Buffer *B) {
   Reset buffer, eliminating contents.
 */
 void buffer_reset(Buffer *B) {
-    B->data = NULL; // ?????
+    char *data = (char*)B->data;
+    for (int i = 0; i < B->buffer_size; i++) {
+        data[i] = '\0';
+    }
 }
 
 /*
@@ -36,17 +39,24 @@ void buffer_reset(Buffer *B) {
   the buffer size is increased and the contents are copied.
 */
 void *buffer_push_back(Buffer *B) {
-    int i, size = B->member_size * B->buffer_size;
-    for (i = 0; i < size; i++)
-        if (B->data[i] == NULL)
+    void *pos;
+    char *data = (char*)B->data;
+    int i, size = B->buffer_size;
+    // procura a primeira pos livre
+    for (i = 0; i < size; i++) {
+        if (data[i] == '\0')
             break;
+    }
     // excederá o limite, realoca o buffer
     if (i == size) {
-        B->data = realloc(B->data, 2*sizeof(B->data)); // might work idk
-        // idk either, a função ser void nao ajuda tambem
-        return (char*) B->data[size];
+        B->buffer_size *= 2;
+        B->data = realloc(B->data, B->buffer_size*B->member_size);
+        // idk, a função ser void nao ajuda tambem
+        pos = &data[size];
+        return pos;
     }
-    return (char*) B->data[i];
+    pos = &data[i];
+    return pos;
 }
 
 /*
@@ -63,4 +73,5 @@ int read_line(FILE *input, Buffer *B) {
         buffer_push_char(B, c);
         c = getc(input);
     }
+    return 0;
 }
