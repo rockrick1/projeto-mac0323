@@ -10,7 +10,7 @@
 Buffer *buffer_create(size_t member_size) {
     Buffer *B = (Buffer*) malloc(sizeof(Buffer));
     B->member_size = member_size;
-    B->buffer_size = 2;
+    B->buffer_size = 64;
     B->data = (char*) malloc(B->buffer_size * B->member_size);
     return B;
 }
@@ -50,8 +50,10 @@ void *buffer_push_back(Buffer *B) {
     // excederá o limite, realoca o buffer
     if (i == size) {
         B->buffer_size *= 2;
-        B->data = realloc(B->data, B->buffer_size*B->member_size);
-        // idk, a função ser void nao ajuda tambem
+        B->data = (char*)realloc(B->data, B->buffer_size*B->member_size);
+        data = (char*)B->data;
+        for (int j = size; j < B->buffer_size; j++)
+            data[j] = '\0';
         pos = &data[size];
         return pos;
     }

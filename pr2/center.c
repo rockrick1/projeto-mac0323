@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 		printf("%s",data);
 	}
 	data = (char*)b->data;
-	printf("%s",data);
+	printf("%s\n",data);
 
 	// for (int i = 40; i < 200; i++)
 	// 	buffer_push_char(b, 'A');
