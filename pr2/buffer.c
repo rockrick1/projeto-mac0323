@@ -12,6 +12,7 @@ Buffer *buffer_create(size_t member_size) {
     B->member_size = member_size;
     B->buffer_size = 64;
     B->data = (char*) malloc(B->buffer_size * B->member_size);
+    buffer_reset(B);
     return B;
 }
 
@@ -83,6 +84,6 @@ int read_line(FILE *input, Buffer *B) {
             n++;
         }
     }
-    if (c == EOF) return 0;
+    if (n == 1 && c == EOF) return 0;
     return n;
 }
