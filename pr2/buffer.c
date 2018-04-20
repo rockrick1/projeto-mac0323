@@ -75,13 +75,41 @@ int read_line(FILE *input, Buffer *B) {
     buffer_reset(B);
 
     char c = getc(input);
+    char nc;
     buffer_push_char(B, c);
     n++;
     while (c != '\n' && c != EOF) {
         c = getc(input);
+
+        //Ignora espaços demais
+        if(c == ' '){
+        	nc = getc(input);
+        	while(nc == ' '){
+        		nc = getc(input);
+        	}
+        	ungetc(nc,input);
+        }
+
         if (c != EOF) {
             buffer_push_char(B, c);
             n++;
+        }
+
+        // ACHAMOS UM \n?!
+
+        if(c == '\n'){
+        	nc = getc(input); // É UM PARAGRAFO?!!!!!
+        	if(nc == '\n'){
+        		while(nc == '\n'){ // SIM, CONSUME \Ns extras
+        			nc = getc(input);
+        		}
+        		buffer_push_char(B, c); // PUT \Ns
+        		n++;
+        		ungetc(nc,input);
+        	} 
+        	else{          //NÃO É, ABORT ABORT
+        		ungetc(nc,input);
+        	}
         }
     }
     if (n == 1 && c == EOF) return 0;
