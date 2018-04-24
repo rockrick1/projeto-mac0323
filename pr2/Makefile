@@ -12,4 +12,3 @@ center: $(CENTER)
 
 clean:
 	rm -rf *.o
-	rm center
