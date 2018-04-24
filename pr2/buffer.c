@@ -72,6 +72,7 @@ void *buffer_push_back(Buffer *B) {
 */
 int read_line(FILE *input, Buffer *B) {
     int n = 0;
+    int cond = 0;
     buffer_reset(B);
 
     char c = getc(input);
@@ -102,7 +103,14 @@ int read_line(FILE *input, Buffer *B) {
         	if(nc == '\n'){
         		while(nc == '\n'){ // SIM, CONSUME \Ns extras
         			nc = getc(input);
+                    if (nc == EOF)
+                    {
+                        ungetc(nc, input);
+                        cond = 1;
+                        break;
+                    }
         		}
+                if (cond) break;
         		buffer_push_char(B, c); // PUT \Ns
         		n++;
         		ungetc(nc,input);
