@@ -25,7 +25,6 @@ int main(int argc, char **argv) {
 		chars = read_line(input, B);
 		if (chars != 0) {
 			data = (char*)B->data;
-			// printf("line %d: %s\n",cur_line, data);
 			count = 0;
 			// conta quantos chars tem a partir do primeiro nao-space
 			// e guarda eles num buffer auxiliar
@@ -58,7 +57,6 @@ int main(int argc, char **argv) {
 				for (int i = 0; i < spaces; i++)
 					fprintf(output, " ");
 				fprintf(output, "%s", aux_data);
-				// printf("line %d: count %d: spaces %d\n", cur_line, count, spaces);
 			}
 
 			cur_line++;
@@ -67,7 +65,7 @@ int main(int argc, char **argv) {
 		// chegou no fim do arquivo
 		else break;
 	}
-
+	fprintf(output, "\n");
 	buffer_destroy(B);
 	buffer_destroy(aux);
 	fclose(input);

@@ -29,7 +29,7 @@ void buffer_destroy(Buffer *B) {
 */
 void buffer_reset(Buffer *B) {
     char *data = (char*)B->data;
-    for (int i = 0; i < B->buffer_size; i++) {
+    for (unsigned int i = 0; i < B->buffer_size; i++) {
         data[i] = '\0';
     }
 }
@@ -53,7 +53,7 @@ void *buffer_push_back(Buffer *B) {
         B->buffer_size *= 2;
         B->data = (char*)realloc(B->data, B->buffer_size*B->member_size);
         data = (char*)B->data;
-        for (int j = size; j < B->buffer_size; j++)
+        for (unsigned int j = size; j < B->buffer_size; j++)
             data[j] = '\0';
         pos = &data[size];
         return pos;
@@ -97,7 +97,6 @@ int read_line(FILE *input, Buffer *B) {
         }
 
         // ACHAMOS UM \n?!
-
         if(c == '\n'){
         	nc = getc(input); // É UM PARAGRAFO?!!!!!
         	if(nc == '\n'){
@@ -114,8 +113,8 @@ int read_line(FILE *input, Buffer *B) {
         		buffer_push_char(B, c); // PUT \Ns
         		n++;
         		ungetc(nc,input);
-        	} 
-        	else{          //NÃO É, ABORT ABORT
+        	}
+        	else{ //NÃO É, ABORT ABORT
         		ungetc(nc,input);
         	}
         }

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -pedantic -O2
+CFLAGS=-Wall -std=c99 -pedantic -O2 -Wextra
 CENTER=center.c buffer.o
 
 all: center clean
