@@ -2,15 +2,15 @@
 #include <stdlib.h>
 #include "stable.h"
 
-static unsigned int convert(char* s) {
+static unsigned int convert(char* s) {  //pega uma string e converte ela para um inteiro, unsigned pra caber caso a string seja mto grande
     unsigned int k = 0;
     for(int i = 0; s[i] != '\0'; i++) {
-        k = k * 179 + s[i];
+        k = k * 179 + s[i];             //base 179, porque é um número primo completamente arbitrario
     }
     return k;
 }
 
-static int hash(char* chave, int m) {
+static int hash(char* chave, int m) {  //hash, até agora com um m qualquer que ela recebe, esperançosamente presumindo que ele é primo
     unsigned int chv = convert(chave);
     return chv%m;
 }
