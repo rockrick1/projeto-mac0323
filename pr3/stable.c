@@ -2,6 +2,19 @@
 #include <stdlib.h>
 #include "stable.h"
 
+static unsigned int convert(char* s) {
+    unsigned int k = 0;
+    for(int i = 0; s[i] != '\0'; i++) {
+        k = k * 179 + s[i];
+    }
+    return k;
+}
+
+static int hash(char* chave, int m) {
+    unsigned int chv = convert(chave);
+    return chv%m;
+}
+
 SymbolTable stable_create() {
     int n = 100;
     SymbolTable ST = malloc(n * sizeof(EntryData)); // temporario(?)
