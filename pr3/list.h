@@ -1,6 +1,6 @@
 #include "stable.h"
 
-typedef struct{
+typedef struct Node{
 
  char *key;
  EntryData val;
@@ -8,11 +8,11 @@ typedef struct{
 
 }Node;
 
-typedef struct{
+typedef struct {
 
  int size;
  Node *root;
-	
+
 }Lista;
 
 Lista* lista_create();

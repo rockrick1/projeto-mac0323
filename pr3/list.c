@@ -1,5 +1,6 @@
 #include "list.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 Lista* lista_create(){
 
@@ -55,7 +56,7 @@ int main(){
 	Lista* l = lista_create();
 
 	EntryData d;
-	
+
 	d.i = 2;
 	lista_insert(l,"abc",d);
 

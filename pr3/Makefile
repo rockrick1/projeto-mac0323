@@ -4,7 +4,7 @@ FREQ=freq.c stable.o
 
 all: freq clean
 
-center: $(FREQ)
+freq: $(FREQ)
 	$(CC) $(FREQ) $(CFLAGS) -o freq
 
 %.o: %.c %.h
