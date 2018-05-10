@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -std=c99 -pedantic -O2 #-Wextra
-FREQ=freq.c stable.o
+FREQ=freq.c stable.o list.o
 
 all: freq clean
 

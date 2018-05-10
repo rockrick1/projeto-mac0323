@@ -8,12 +8,14 @@ typedef struct Node{
 
 }Node;
 
-typedef struct {
+typedef struct Lista{
 
  int size;
  Node *root;
 
 }Lista;
+
+typedef struct Lista* stable_s;
 
 Lista* lista_create();
 
