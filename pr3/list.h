@@ -15,7 +15,13 @@ typedef struct Lista{
 
 }Lista;
 
-typedef struct Lista* stable_s;
+typedef struct stable_s{
+
+ int n;
+ int m;
+ struct Lista *pos[];
+
+}stable_s;
 
 Lista* lista_create();
 

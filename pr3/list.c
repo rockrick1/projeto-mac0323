@@ -37,7 +37,7 @@ void lista_insert(Lista *lista, char *key, EntryData val){
 	p = lista->root;
 
 	while (p != NULL) {
-		if (strcmp(key, p->key)) {
+		if (strcmp(key, p->key)==0) {
 			(p->val.i)++;
 			return;
 		}
@@ -59,28 +59,10 @@ void lista_insert(Lista *lista, char *key, EntryData val){
 }
 
 void lista_print(Lista *lista){
-	Node* next;
+	Node *next = NULL;
 	next = lista->root;
 	for(int i = 0; i<lista->size; i++){
 		printf("%s %d\n", next->key, next->val);
 		next = next->next;
 	}
-}
-
-int main(){
-
-	Lista* l = lista_create();
-
-	EntryData d;
-
-	d.i = 2;
-	lista_insert(l,"abc",d);
-
-	d.i = 10;
-	lista_insert(l,"def",d);
-
-	lista_print(l);
-
-	lista_destroy(l);
-
 }

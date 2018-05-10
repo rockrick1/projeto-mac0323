@@ -21,19 +21,24 @@ static int hash(char* chave, int m) {
     return chv%m;
 }
 
-SymbolTable stable_create() {
-    int n = 100;
+SymbolTable stable_create(int n, int m) {
 
     SymbolTable ST = malloc(n * sizeof(stable_s)); // como faz isso pls halp
     for (int i = 0; i < n; i++)
-        ST[i] = lista_create();
+        ST->pos[i] = lista_create();
+    
+
+    ST->n = n;
+    ST->m = m;
+
     return ST;
 }
 
 void stable_destroy(SymbolTable table) {
-    // 100 seria o m?
-    for (int i = 0; i < 100; i++)
-        lista_destroy(table[i]); // idk
+
+    for (int i = table->n-1; i > -1; i--)
+        lista_destroy(table->pos[i]);
+
     free(table);
 }
 
