@@ -1,8 +1,9 @@
 #include "stable.h"
+#include <stdio.h>
 
 typedef struct Node{
 
- char *key;
+ const char *key;
  EntryData val;
  struct Node *next;
 
@@ -27,6 +28,6 @@ Lista* lista_create();
 
 void lista_destroy(Lista *lista);
 
-void lista_insert(Lista *lista, char *key, EntryData val);
+InsertionResult lista_insert(Lista *lista, const char *key, EntryData val);
 
 void lista_print(Lista *lista);
