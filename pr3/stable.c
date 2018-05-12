@@ -62,16 +62,28 @@ InsertionResult stable_insert(SymbolTable table, const char *key) {
 
     result = lista_insert(table->pos[idx], key, val);
 
-    table->n++;
+    if (result.new != 0)
+        table->n++;
 
     return result;
 }
 
 EntryData *stable_find(SymbolTable table, const char *key) {
-    EntryData *data;
-    // procura de vdd
-    // se nao achou, return NULL;
-    return data;
+    EntryData *data = malloc(sizeof(int));
+    int idx = hash(key, table->m);
+
+    if (table->pos[idx]->root == NULL) return NULL;
+
+    Node *p = table->pos[idx]->root;
+
+    while (p != NULL) {
+        if (strcmp(key, p->key) == 0) {
+            data->i = p->val.i;
+            return data;
+        }
+        p = p->next;
+    }
+    return NULL;
 }
 
 int stable_visit(SymbolTable table, int (*visit)(const char *key, EntryData *data)) {
