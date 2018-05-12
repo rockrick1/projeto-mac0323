@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "stable.h"
 #include "list.h"
 
@@ -25,7 +26,8 @@ static int hash(const char* chave, int m) {
 
 SymbolTable stable_create(int m) {
 
-    SymbolTable ST = malloc(sizeof(stable_s)); // como faz isso pls halp
+    SymbolTable ST = malloc(sizeof(SymbolTable)); // como faz isso pls halp
+    ST->pos = malloc(m * sizeof(Lista));
     for (int i = 0; i < m; i++)
         ST->pos[i] = lista_create();
 

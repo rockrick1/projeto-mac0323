@@ -20,7 +20,7 @@ typedef struct stable_s{
 
  int n;
  int m;
- struct Lista *pos[];
+ struct Lista **pos;
 
 }stable_s;
 
