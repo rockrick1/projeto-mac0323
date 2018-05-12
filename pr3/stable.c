@@ -31,10 +31,6 @@ SymbolTable stable_create(int m) {
     for (int i = 0; i < m; i++)
         ST->pos[i] = lista_create();
 
-    lista_print(ST->pos[0]);
-    printf("uhm\n");
-    stable_insert(ST, "0");
-
     ST->n = 0;
     ST->m = m;
 
@@ -69,7 +65,7 @@ InsertionResult stable_insert(SymbolTable table, const char *key) {
 }
 
 EntryData *stable_find(SymbolTable table, const char *key) {
-    EntryData *data = malloc(sizeof(int));
+    EntryData *data;
     int idx = hash(key, table->m);
 
     if (table->pos[idx]->root == NULL) return NULL;
@@ -78,7 +74,7 @@ EntryData *stable_find(SymbolTable table, const char *key) {
 
     while (p != NULL) {
         if (strcmp(key, p->key) == 0) {
-            data->i = p->val.i;
+            data = &p->val;
             return data;
         }
         p = p->next;
@@ -87,5 +83,24 @@ EntryData *stable_find(SymbolTable table, const char *key) {
 }
 
 int stable_visit(SymbolTable table, int (*visit)(const char *key, EntryData *data)) {
-    return 0;
+
+    // se tirar isso ainda funciona do jeito que eu testei, mas talvez de
+    // testa de outro jeito precise disso, então acho bom deixar
+    /*****************/
+    visit = print_node;
+    /*****************/
+
+    for (int i = 0; i < table->m; i++) {
+
+        if (table->pos[i]->root != NULL) {
+            Node *p = table->pos[i]->root;
+
+            while (p != NULL) {
+                EntryData *d = &p->val;
+                visit(p->key, d);
+                p = p->next;
+            }
+        }
+    }
+    return EXIT_SUCCESS;
 }

@@ -30,4 +30,4 @@ void lista_destroy(Lista *lista);
 
 InsertionResult lista_insert(Lista *lista, const char *key, EntryData val);
 
-void lista_print(Lista *lista);
+int print_node(const char *key, EntryData *data);

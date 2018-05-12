@@ -80,11 +80,9 @@ InsertionResult lista_insert(Lista *lista, const char *key, EntryData val){
 	return result;
 }
 
-void lista_print(Lista *lista){
-	Node *next = NULL;
-	next = lista->root;
-	for(int i = 0; i<lista->size; i++){
-		printf("%s %d\n", next->key, next->val);
-		next = next->next;
-	}
+int print_node(const char *key, EntryData *data) {
+    // devemos considerar outras possibilidades de valores de data
+    // como string e pointer (but how? :thonk:)
+    printf("%s : %d\n", key, data->i);
+    return 0;
 }
