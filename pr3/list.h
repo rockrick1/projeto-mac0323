@@ -31,3 +31,5 @@ void lista_destroy(Lista *lista);
 InsertionResult lista_insert(Lista *lista, const char *key, EntryData val);
 
 void lista_print(Lista *lista);
+
+void lista_getall(Lista *lista,char *a[],int i);

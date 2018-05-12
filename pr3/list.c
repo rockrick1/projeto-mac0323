@@ -18,26 +18,17 @@ void lista_destroy(Lista *lista){
 
 	if(lista->root != NULL){
 
-	printf("Destroir, preparando\n");
-
-	Node *ant;
-	ant = lista->root;
-
-	printf("Destroir, preparado\n\n");
-
-	while (lista->root != NULL){
-		printf("iterando root =  %s\n",lista->root->key);
+		Node *ant;
 		ant = lista->root;
-		lista->root = lista->root->next;
-		free(ant);
-		printf("completado mais uma\n\n");
-	}
+
+		while (lista->root != NULL){
+			ant = lista->root;
+			lista->root = lista->root->next;
+			free(ant);
+		}
 	}
 
-	printf("liberando\n");
-	// ISSo ESXPLODE
 	free(lista);
-	printf("liberado\n\n");
 
 }
 
@@ -85,6 +76,16 @@ void lista_print(Lista *lista){
 	next = lista->root;
 	for(int i = 0; i<lista->size; i++){
 		printf("%s %d\n", next->key, next->val);
+		next = next->next;
+	}
+}
+
+void lista_getall(Lista *lista,char *a[],int i){
+	Node *next = NULL;
+	next = lista->root;
+	for(int j = 0; j<lista->size; j++, i++){
+		printf("passing \"%s\" to a[%d]\n", next->key,i);
+		a[i] = next->key;
 		next = next->next;
 	}
 }
