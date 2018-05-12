@@ -16,38 +16,34 @@ Lista* lista_create(){
 
 void lista_destroy(Lista *lista){
 
-	if (lista->root != NULL) {
-		printf("destruir legal\n");
-		Node *ant, *p;
-		ant = lista->root;
-		p = ant;
+	if(lista->root != NULL){
 
-		while (p != NULL){
-			ant = p;
-			p = p->next;
-			free(ant);
-		}
+	printf("Destroir, preparando\n");
+
+	Node *ant;
+	ant = lista->root;
+
+	printf("Destroir, preparado\n\n");
+
+	while (lista->root != NULL){
+		printf("iterando root =  %s\n",lista->root->key);
+		ant = lista->root;
+		lista->root = lista->root->next;
+		free(ant);
+		printf("completado mais uma\n\n");
+	}
 	}
 
+	printf("liberando\n");
 	// ISSo ESXPLODE
-	// free(lista);
+	free(lista);
+	printf("liberado\n\n");
 
 }
 
 InsertionResult lista_insert(Lista *lista, const char *key, EntryData val){
 	InsertionResult result;
-
-	// Primeiro, checa se a lista está vazia
-	if (lista->root == NULL) {
-		lista->root = malloc(sizeof(Node));
-		lista->root->val = val;
-		lista->root->key = key;
-
-		result.new = 0;
-		result.data->i = val.i;
-
-		return result;
-	}
+	EntryData d;
 
 	// Checa se a lista já contém essa chave. Se ja tiver,
 	// aumenta a frequencia dela
@@ -57,7 +53,8 @@ InsertionResult lista_insert(Lista *lista, const char *key, EntryData val){
 		if (strcmp(key, p->key)==0) {
 			(p->val.i)++;
 			result.new = 0;
-			result.data->i = p->val.i;
+			d.i = p->val.i;
+			result.data = &d;
 			return result;
 		}
 		p = p->next;
@@ -67,8 +64,11 @@ InsertionResult lista_insert(Lista *lista, const char *key, EntryData val){
 	// (imagino que todos entrem com val.i = 1 para inicializar a frequencia
 	// de novas palavras)
 	Node* new = malloc(sizeof(Node));
+
 	result.new = 1;
-	result.data->i = 1;
+
+	d.i = 1;
+	result.data = &d;
 
 	new->key = key;
 	new->val = val;

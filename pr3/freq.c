@@ -4,11 +4,13 @@
 
 
 int main(int argc, char **argv) {
-    SymbolTable ST = stable_create(10,17);
+    SymbolTable ST = stable_create(17);
 
     // EntryData d;
     // d.i = 12;
 
+	stable_insert(ST, "0");
+    stable_insert(ST, "9");
     stable_insert(ST, "abc");
     stable_insert(ST, "89wrtu9b");
     stable_insert(ST, "89wrb");

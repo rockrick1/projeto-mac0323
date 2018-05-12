@@ -18,16 +18,22 @@ static unsigned int convert(const char* s) {
 // esperançosamente presumindo que ele é primo
 static int hash(const char* chave, int m) {
     unsigned int chv = convert(chave);
+    if(strcmp(chave,"0")==0)
+        return 0;
     return chv%m;
 }
 
-SymbolTable stable_create(int n, int m) {
+SymbolTable stable_create(int m) {
 
     SymbolTable ST = malloc(sizeof(stable_s)); // como faz isso pls halp
     for (int i = 0; i < m; i++)
         ST->pos[i] = lista_create();
 
-    ST->n = n;
+    lista_print(ST->pos[0]);
+    printf("uhm\n");
+    stable_insert(ST, "0");
+
+    ST->n = 0;
     ST->m = m;
 
     return ST;
