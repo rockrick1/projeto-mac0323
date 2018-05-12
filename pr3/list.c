@@ -18,26 +18,17 @@ void lista_destroy(Lista *lista){
 
 	if(lista->root != NULL){
 
-	printf("Destroir, preparando\n");
-
-	Node *ant;
-	ant = lista->root;
-
-	printf("Destroir, preparado\n\n");
-
-	while (lista->root != NULL){
-		printf("iterando root =  %s\n",lista->root->key);
+		Node *ant;
 		ant = lista->root;
-		lista->root = lista->root->next;
-		free(ant);
-		printf("completado mais uma\n\n");
-	}
+
+		while (lista->root != NULL){
+			ant = lista->root;
+			lista->root = lista->root->next;
+			free(ant);
+		}
 	}
 
-	printf("liberando\n");
-	// ISSo ESXPLODE
 	free(lista);
-	printf("liberado\n\n");
 
 }
 
@@ -85,4 +76,14 @@ int print_node(const char *key, EntryData *data) {
     // como string e pointer (but how? :thonk:)
     printf("%s : %d\n", key, data->i);
     return 0;
+}
+
+void lista_getall(Lista *lista,char *a[],int i){
+	Node *next = NULL;
+	next = lista->root;
+	for(int j = 0; j<lista->size; j++, i++){
+		printf("passing \"%s\" to a[%d]\n", next->key,i);
+		a[i] = next->key;
+		next = next->next;
+	}
 }
