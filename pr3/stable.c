@@ -48,8 +48,8 @@ void stable_destroy(SymbolTable table) {
         lista_destroy(table->pos[i]);
     }
 
-    // isso explode
-    // free(table);
+    free(table->pos);
+    free(table);
 }
 
 InsertionResult stable_insert(SymbolTable table, const char *key) {
