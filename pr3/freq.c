@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 
     FILE *file = fopen(argv[1], "r");
 
-    SymbolTable ST = stable_create(1000);
+    SymbolTable ST = stable_create(53);
 
     char c;
     char prev = ' '; //pra ver se não está em vários espaços
