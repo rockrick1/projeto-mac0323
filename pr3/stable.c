@@ -19,8 +19,6 @@ static unsigned int convert(const char* s) {
 // esperançosamente presumindo que ele é primo
 static int hash(const char* chave, int m) {
     unsigned int chv = convert(chave);
-    if(strcmp(chave,"0")==0)
-        return 0;
     return chv%m;
 }
 
@@ -39,10 +37,8 @@ SymbolTable stable_create(int m) {
 
 void stable_destroy(SymbolTable table) {
 
-    for (int i = table->m-1; i > -1; i--) {
-        printf("%d\n", i);
+    for (int i = table->m-1; i > -1; i--)
         lista_destroy(table->pos[i]);
-    }
 
     free(table->pos);
     free(table);
@@ -51,7 +47,6 @@ void stable_destroy(SymbolTable table) {
 InsertionResult stable_insert(SymbolTable table, const char *key) {
     InsertionResult result;
     int idx = hash(key, table->m);
-    printf("hash de %s: %d\n", key, idx);
 
     EntryData val;
     val.i = 1;

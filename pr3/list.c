@@ -82,7 +82,6 @@ void lista_getall(Lista *lista,char *a[],int i){
 	Node *next = NULL;
 	next = lista->root;
 	for(int j = 0; j<lista->size; j++, i++){
-		printf("passing \"%s\" to a[%d]\n", next->key,i);
 		a[i] = next->key;
 		next = next->next;
 	}

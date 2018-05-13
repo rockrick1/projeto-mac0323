@@ -79,23 +79,19 @@ int main(int argc, char **argv) {
     }
 
     printf("\n");
+
     int max = -1;
-
-    //Acha o valor maximo
-
-    for(int i = 0; i<ST->n; i++){
-        if((int)(strlen(a[i]))>max)
-            max = strlen(a[i]);
-    }
-
     int j;
     int diff;
 
-    //Ordena por insertion sort
+    //Ordena por insertion sort enquanto procura o valor maximo
 
     for(int i = 0; i<ST->n; i++){
 
         j = i;
+
+        if((int)(strlen(a[i]))>max)
+            max = strlen(a[i]);
 
         while(j>0){
             diff = strcmp(a[j],a[j-1]);
