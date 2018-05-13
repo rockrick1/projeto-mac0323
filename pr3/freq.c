@@ -1,18 +1,73 @@
 #include "list.h"
 #include "stable.h"
+#include "string.h"
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
+
+    FILE *file = fopen(argv[1], "r");
+
     SymbolTable ST = stable_create(17);
 
-	stable_insert(ST, "0");
+    char c;
+    char prev = ' '; //pra ver se não está em vários espaços
+    int w = 0; //onde estamos no buffer
+    char *buffer = malloc(182*sizeof(char)); //buffer pra jogar palavras
+
+    while (1) {
+        c = getc(file);
+        if (c == EOF && !isspace(prev)) {
+            //se for eof e tiver uma palavra antes, coloca a palavra na st e termina
+            buffer[w] = '\0';
+            w++;
+            char *word = malloc(w*sizeof(char));
+            strncpy(word, buffer, w);
+            stable_insert(ST, word);
+
+            //reseta tudo
+            for (int i = 0; i < w; i++)
+                buffer[i] = '\0';
+            w = 0;
+            
+            break;
+        }
+        if (c == EOF) break; //safety measures
+        else if (!isspace(c)) {
+            //se c não é espaço, joga ele no buffer
+            buffer[w] = c;
+            w++;
+        }
+        else if (isspace(c) && !isspace(prev)) {
+            //se c é espaço e antes dele acabou uma palavra, joga a palavra na ST e reseta tudo
+            buffer[w] = '\0';
+            w++;
+            char *word = malloc(w*sizeof(char));
+            strncpy(word, buffer, w);
+            stable_insert(ST, word);
+
+            //reseta tudo
+            for (int i = 0; i < w; i++)
+                buffer[i] = '\0';
+            w = 0;
+        }
+        prev = c;
+    }
+
+    free(buffer);
+    fclose(file);
+
+    
+    /*
+    stable_insert(ST, "0");
     stable_insert(ST, "9");
     stable_insert(ST, "abc");
     stable_insert(ST, "aab");
     stable_insert(ST, "zxc");
     stable_insert(ST, "89wrtu9b");
     stable_insert(ST, "89wrb");
+    */
 
     //Coloca toda a lista em a
 
@@ -68,5 +123,5 @@ int main(int argc, char **argv) {
     printf("\n");
     stable_destroy(ST);
 
-    return 0;
+    return 0; 
 }
