@@ -24,7 +24,7 @@ static int hash(const char* chave, int m) {
 
 SymbolTable stable_create(int m) {
 
-    SymbolTable ST = malloc(sizeof(SymbolTable)); // como faz isso pls halp
+    SymbolTable ST = malloc(sizeof(stable_s)); // como faz isso pls halp
     ST->pos = malloc(m * sizeof(Lista));
     for (int i = 0; i < m; i++)
         ST->pos[i] = lista_create();
@@ -92,7 +92,8 @@ int stable_visit(SymbolTable table, int (*visit)(const char *key, EntryData *dat
 
             while (p != NULL) {
                 EntryData *d = &p->val;
-                visit(p->key, d);
+                if (visit(p->key, d) == 0)
+                    return  EXIT_FAILURE;
                 p = p->next;
             }
         }

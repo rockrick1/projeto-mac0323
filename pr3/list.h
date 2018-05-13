@@ -32,4 +32,4 @@ InsertionResult lista_insert(Lista *lista, const char *key, EntryData val);
 
 int print_node(const char *key, EntryData *data);
 
-void lista_getall(Lista *lista,char *a[],int i);
+void lista_getall(Lista *lista,const char *a[],int i);

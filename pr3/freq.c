@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 
     FILE *file = fopen(argv[1], "r");
 
-    SymbolTable ST = stable_create(17);
+    SymbolTable ST = stable_create(1000);
 
     char c;
     char prev = ' '; //pra ver se não está em vários espaços
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
             for (int i = 0; i < w; i++)
                 buffer[i] = '\0';
             w = 0;
-            
+
             break;
         }
         if (c == EOF) break; //safety measures
@@ -58,20 +58,10 @@ int main(int argc, char **argv) {
     free(buffer);
     fclose(file);
 
-    
-    /*
-    stable_insert(ST, "0");
-    stable_insert(ST, "9");
-    stable_insert(ST, "abc");
-    stable_insert(ST, "aab");
-    stable_insert(ST, "zxc");
-    stable_insert(ST, "89wrtu9b");
-    stable_insert(ST, "89wrb");
-    */
 
     //Coloca toda a lista em a
 
-    char *a[ST->n];
+    const char *a[ST->n];
     int b = 0;
     for(int i = 0; i<ST->m; i++){
         lista_getall(ST->pos[i],a,b);
@@ -83,6 +73,7 @@ int main(int argc, char **argv) {
     int max = -1;
     int j;
     int diff;
+
 
     //Ordena por insertion sort enquanto procura o valor maximo
 
@@ -98,13 +89,14 @@ int main(int argc, char **argv) {
             if(diff>0)
                 break;
             else{
-                char *t = a[j];
+                const char *t = a[j];
                 a[j] = a[j-1];
                 a[j-1] = t;
                 j--;
             }
         }
     }
+
 
     //Imprime tudo com o numero de espaços bonito
 
@@ -119,5 +111,5 @@ int main(int argc, char **argv) {
     printf("\n");
     stable_destroy(ST);
 
-    return 0; 
+    return 0;
 }

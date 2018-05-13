@@ -73,12 +73,14 @@ InsertionResult lista_insert(Lista *lista, const char *key, EntryData val){
 
 int print_node(const char *key, EntryData *data) {
     // devemos considerar outras possibilidades de valores de data
-    // como string e pointer (but how? :thonk:)
+    // como string e pointer
+	if (key == NULL || data == NULL)
+		return 0;
     printf("%s : %d\n", key, data->i);
-    return 0;
+    return 1;
 }
 
-void lista_getall(Lista *lista,char *a[],int i){
+void lista_getall(Lista *lista,const char *a[],int i){
 	Node *next = NULL;
 	next = lista->root;
 	for(int j = 0; j<lista->size; j++, i++){
