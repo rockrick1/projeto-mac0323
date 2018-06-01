@@ -31,14 +31,14 @@ int main(int argc, char **argv) {
                 printf("erro poarr\n");
             // senao, insere e altera o valor pra opds[0] (hopefully)
             else {
-                InsertionResult *result;
+                InsertionResult result;
                 result = stable_insert(alias_table, top->label);
-                result->data = top->opds[0]
+                result.data->opd = top->opds[0];
                 // ou isso
                 // stable_find(alias_table, top->label)->opd = top->opds[0];
             }
         }
-        Operand opd = top
+        Operand opd = *top->opds[0];
     }
 
     // libera as instruções

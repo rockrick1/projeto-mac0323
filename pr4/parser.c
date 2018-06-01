@@ -82,8 +82,6 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		const char *t_opd[l];
 		for(int j = 0; j < l; j++, k++) t_opd[j] = s[k];
 
-		int num = 0; //valor legal do operando ( caso necessario )
-
 		if(t_opd[0]=='$'){
 			if(op->opd_types[z]==REGISTER){
 				if(l<2){
