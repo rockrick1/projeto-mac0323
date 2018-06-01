@@ -20,6 +20,25 @@ int main(int argc, char **argv) {
         const char **errptr; // owo whats dis??
 
         if (parse(data, alias_table, instr, errptr) == 0) break;
+
+        Instruction *top = *instr;
+        const Operator *op = top->op;
+
+        // lida com o IS, se for o caso
+        if (op->opcode == IS) {
+            // se ja estiver na tabela, mete o loco
+            if (stable_find(alias_table, top->label))
+                printf("erro poarr\n");
+            // senao, insere e altera o valor pra opds[0] (hopefully)
+            else {
+                InsertionResult *result;
+                result = stable_insert(alias_table, top->label);
+                result->data = top->opds[0]
+                // ou isso
+                // stable_find(alias_table, top->label)->opd = top->opds[0];
+            }
+        }
+        Operand opd = top
     }
 
     // libera as instruções
