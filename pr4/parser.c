@@ -2,6 +2,7 @@
 #include "optable.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int parse(const char *s, SymbolTable alias_table, Instruction **instr, const char **errptr){
 
@@ -20,9 +21,11 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 
 	char t_label[l]; //"test label"
+	// usar strcpy aqui talvez?
 	for(int j = 0; j<l; j++, k++) t_label[j] = s[k]; //copia a palavra
 
-	Operator op = optable_find(t_label);	//se null, não é um OP, portanto label? Outros casos?
+	//se null, não é um OP, portanto label? Outros casos?
+	const Operator *op = optable_find(t_label);
 
 	if(op == NULL){		//deve ser um label então
 		label = t_label;
@@ -61,11 +64,11 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	//Basicamente cada operator tem um vertor com o que ele precisa.
 	//Se não precisar de argumentos, ele fala OP_NONE, assim:
 
-	Operand opds[3]; //prepara os operandos
+	Operand *opds[3]; //prepara os operandos
 
-	for(int z = 0; z<3; z++){
+	for(int z = 0; z < 3; z++){
 
-		if(op->opd_types[z]==OP_NONE) break; //ele não precisa mais de argumentos
+		if(op->opd_types[z] == OP_NONE) break; //ele não precisa mais de argumentos
 
 		while(s[k]==' ') k++; //acha o inicio do argumento
 		i = k;
@@ -74,16 +77,16 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		l = i-k;
 
 		char *t_opd[l];
-		for(int j = 0; j<l; j++, k++) t_opd[j] = s[k];
+		for(int j = 0; j < l; j++, k++) t_opd[j] = s[k];
 
 		//opds[z] = operand_create o formato correto... Alguem sabe como fazer isso?
 		// 			eu pensei que teria que dar algum switch case no opd_types of no t_opd
 
 	}
 
-	Instruction new = {label,op,opds};	//Cria a instruction nova
-	new->next = instr;					//Faz ela apontar para a instrução anterior
-	instr = new;						//Agora ela está no topo
+	Instruction *new = instr_create(label,op,opds);	//Cria a instruction nova
+	new->next = *instr;								//Faz ela apontar para a instrução anterior
+	instr = &new;									//Agora ela está no topo
 
 
 	// A gente precisa dar frees aqui etc?
