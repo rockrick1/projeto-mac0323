@@ -1,13 +1,15 @@
 #include "parser.h"
 #include "optable.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int parse(const char *s, SymbolTable alias_table, Instruction **instr, const char **errptr){
-	
+
 	int k = 0; //indice do começo da palavra
 	int i = 0; //indice que percorre s / indice do fim da palavra
 	int l = 0; //tamanho da palavra
 
-	char *label = null;
+	char *label = NULL;
 
 	while(s[i]!=' ' || s[i]!='\n' || s[i]!=EOF) i++; //acha o fim da palabra
 
@@ -22,7 +24,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	Operator op = optable_find(t_label);	//se null, não é um OP, portanto label? Outros casos?
 
-	if(op==null){		//deve ser um label então
+	if(op == NULL){		//deve ser um label então
 		label = t_label;
 
 		//Provavelmente alguma coisa aqui para checar a alias_table
@@ -38,7 +40,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	}
 
-	if(label !=  null){ //então temos que procurar o op
+	if(label !=  NULL){ //então temos que procurar o op
 
 		while(s[k]==' ') k++; //acha o inicio da palavra
 		i = k;
@@ -51,7 +53,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		op = optable_find(t_op);
 
-		if(op==null){} //Manda uns erros legais aqui
+		if(op==NULL){} //Manda uns erros legais aqui
 
 	}
 
@@ -79,7 +81,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	}
 
-	Instruction new = (label,op,opds);	//Cria a instruction nova
+	Instruction new = {label,op,opds};	//Cria a instruction nova
 	new->next = instr;					//Faz ela apontar para a instrução anterior
 	instr = new;						//Agora ela está no topo
 
