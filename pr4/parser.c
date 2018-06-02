@@ -140,9 +140,9 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		printf("\n\nVou procurar o operand %d!\n",z);
 
-		printf("Achei o inicio do operand.\n");
 		k = i;
 		while(isspace(s[k])) k++; //acha o inicio do argumento
+		printf("Achei o inicio do operand.\n");
 		i = k;
 		// acha o fim do argumento
 		while(!isspace(s[i]) && s[i] != ',' && s[i] != '\0' && s[i] != EOF) i++;

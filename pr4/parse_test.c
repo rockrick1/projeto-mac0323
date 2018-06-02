@@ -7,20 +7,31 @@
 int main(int argc, char **argv) {
     FILE *input = fopen(argv[1], "r");
 
+    printf("Dei file input\n");
     Buffer *B = buffer_create(sizeof(char));
+    printf("Criei o buffer\n");
     SymbolTable alias_table = stable_create(29);
+    printf("Criei a table\n");
     Instruction *instr = NULL;
+    printf("Criei a Instruction\n");
+
+    set_prog_name("parse_test");
 
     // passa por todas as linhas do codigo
     for (int line = 1;; line++) {
+
+    	printf("\nDentro do for, linha %d\n",line);
         // le a linha de codigo e poe no buffer
-        read_line(input, B);
+        if(read_line(input, B) == 0)
+        	break;
+
         char *data = (char*)B->data;
 
         const char *errptr;
 
         if (parse(data, alias_table, &instr, &errptr) == 0) {
             printf("deu ruim, to vazando\n");
+            print_error_msg(NULL);
             break;
         }
 
