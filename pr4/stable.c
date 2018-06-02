@@ -66,7 +66,8 @@ EntryData *stable_find(SymbolTable table, const char *key) {
     int idx = hash(key, table->m);
 
     // se nao tiver nenhuma chave com esse hash, retorna null
-    if (table->pos[idx]->root == NULL) return NULL;
+    printf("m:%d\n", table->m);
+    if (table->pos == NULL || table->pos[idx]->root == NULL) return NULL;
 
     Node *p = table->pos[idx]->root;
 
