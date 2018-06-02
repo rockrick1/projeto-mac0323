@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
         read_line(input, B);
         char *data = (char*)B->data;
 
-        const char *errptr; // owo whats dis??
+        const char *errptr;
 
         if (parse(data, alias_table, &instr, &errptr) == 0) {
             printf("deu ruim, to vazando\n");
@@ -25,12 +25,11 @@ int main(int argc, char **argv) {
         }
 
         if (instr != NULL) {
-            printf("oi\n");
             Instruction *top = instr;
             const Operator *op = top->op;
 
             // lida com o IS, se for o caso
-            if (op->opcode == IS) {
+            if (op->opcode & IS) {
                 // se ja estiver na tabela, mete o loco
                 if (stable_find(alias_table, top->label))
                     printf("erro poarr\n");

@@ -16,6 +16,9 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	int i = 0; //indice que percorre s / indice do fim da palavra
 	int l = 0; //tamanho da palavra
 
+	const Operator *op;
+	Operand *opds[3];
+
 
 	//acha o fim da palavra
 	while(!isspace(s[i])) {
@@ -50,13 +53,13 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	k = i;
 
 
-	char *label = malloc((l + 1)*sizeof(char));
+	char label[l + 1];
 
 	//se null, não é um OP, portanto label? Outros casos?
 	//E se o cara tiver escrito o comando errado?
 	//Acho que poderiamos contar quantas palavras temos na linha,
 	//se tiver 3, temos um label, caso contrario não.
-	const Operator *op = optable_find(t_label);
+	op = optable_find(t_label);
 
 	if(op == NULL) {		//deve ser um label então
 		printf("Acredito que a palavra seja um label.\n");
@@ -126,8 +129,6 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	//Deem uma olhada no optable.c
 	//Basicamente cada operator tem um vertor com o que ele precisa.
 	//Se não precisar de argumentos, ele fala OP_NONE, assim:
-
-	Operand *opds[3]; //prepara os operandos
 
 	// identifica quantos oerandos sao necessarios
 	int operands = 3;
@@ -246,11 +247,12 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	printf("Vou fazer ela apontar para o começo da lista.\n");
 	new->next = *instr;								//Faz ela apontar para a instrução anterior
 	printf("Vou colocar ela no começo da lista.\n");
-	instr = &new;									//Agora ela está no topo
+	*instr = new;									//Agora ela está no topo
 	printf("Pronto! Tudo parece ter sido feito!\n");
 
+
 	// A gente precisa dar frees aqui etc?
-	free(label);
+
 
 	return 1;
 }
