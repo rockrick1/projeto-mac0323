@@ -36,7 +36,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	printf("Preparando para copiar a palavra com %d chars.\n",l);
 	char t_label[l + 1]; //"test label"
-	strncpy(t_label, s + k, l);
+	for (int c = 0; c < l; c++, k++) t_label[c] = s[k];
 	t_label[l] = '\0';
 	// printf("palavra: %s\n", t_label);
 	printf("Palavra copiada com sucesso.\n");
@@ -109,7 +109,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		printf("Preparando para copiar a palavra com %d chars.\n",l);
 		char t_op[l + 1];
-		strncpy(t_op, s + k, l);
+		for (int c = 0; c < l; c++, k++) t_op[c] = s[k];
 		t_op[l] = '\0';
 		printf("operator: %s\n", t_op);
 		printf("Palavra copiada com sucesso.\n");
@@ -158,18 +158,18 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		printf("Vou começar a copiar esse operand.\n");
 		// strncpy chora com const char :japanese_goblin:
-		const char *t_opd[l + 1];
-		strncpy((char*)t_opd, s + k, l);
-		t_opd[l] = '\0';
-		printf("opd: %s\n", (char*)t_opd);
+		char tt_opd[l + 1];
+		for (int c = 0; c < l; c++, k++) tt_opd[c] = s[k];
+		tt_opd[l] = '\0';
+		printf("opd: %s\n", tt_opd);
 		// for(int j = 0; j < l; j++, k++) t_opd[j] = &s[k];
 		printf("Operand copiado com sucesso.\n");
 
 
 		printf("Hora de verificar que tipo de Operand é esse!\n");
 		// fiz mais um opd pq const char é chato pra porra
-		char tt_opd[l + 1];
-		strcpy(tt_opd, (char*)t_opd);
+		const char *t_opd[l + 1];
+		strcpy((char*)t_opd, tt_opd);
 		if(tt_opd[0] == '$') {
 			printf("Parece que ele é um registrador!\n");
 
@@ -195,8 +195,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			}
 		}
 
-
-		else if(isdigit(t_opd[0])){ // então deve ser um numero, né?
+		else if(isdigit(tt_opd[0])){ // então deve ser um numero, né?
 			printf("Parece que ele é um numero!\n");
 			if(op->opd_types[z] == NUMBER_TYPE){
 				opds[z] = operand_create_number(strtoll(t_opd[1], (char**)t_opd[l-1], 10));
