@@ -103,7 +103,7 @@ int main(int argc, char **argv) {
                     }
 
                     //Cria um novo operando e coloca pos como valor dele
-                    Operand *op = operand_create_number(pos);
+                    Operand *op = operand_create_label(word);
                     stable_find(alias_table, word)->opd = op;
                 }
                 else{
