@@ -50,7 +50,6 @@ InsertionResult stable_insert(SymbolTable table, const char *key) {
 
     // começa com val 1 caso seja uma nova palavra
     EntryData val;
-    val.i = 1;
 
     result = lista_insert(table->pos[idx], key, val);
 
