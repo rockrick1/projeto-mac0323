@@ -28,37 +28,35 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	if (i == 0 && (s[i] == '\n' || s[i] == '*' || s[i] == EOF)) {
 		printf("Achei uma linha sem codigo, vou voltar.\n");
-		return 1; 	//acho que nesse caso seria um paragrafo,
-					//uma linha vazia, só um comentario, então a gente ignora?
+		return 1;
 	}
 
 	l = i-k;
 
-	printf("Preparando para copiar a palavra com %d chars.\n",l);
-	char label[l + 1]; //"test label"
-	for (int c = 0; c < l; c++, k++) label[c] = s[k];
-	label[l] = '\0';
-	// printf("palavra: %s\n", t_label);
-	printf("Palavra copiada com sucesso, tamanho %d .\n",l);
+	char label[l + 1];
 
-	// // remove a parte da label da linha, para mais facilidade na hora de
-	// // fazer o parse no resto
-	// int j;
-	// for (j = i; isspace(s[j]); j++);
-	// s = s + j;
-	// printf("%s\n", s);
+	//Copia a palavra se ela existir
+	if(l>0){
+		printf("Preparando para copiar a palavra com %d chars.\n",l);
+
+		for (int c = 0; c < l; c++, k++) label[c] = s[k];
+		label[l] = '\0';
+
+		printf("Palavra copiada com sucesso, tamanho %d .\n",l);
+	}
+	else{
+		printf("Encontrei uma palavra vazia.\n");
+	}
+
 
 	// coloca i e k no inicio da proxima palavra
 	while (isspace(s[i]) && s[i] != '\0') i++;
 	k = i;
 
-	//se null, não é um OP, portanto label? Outros casos?
-	//E se o cara tiver escrito o comando errado?
-	//Acho que poderiamos contar quantas palavras temos na linha,
-	//se tiver 3, temos um label, caso contrario não.
 	op = optable_find(label);
 
-	if(l>0 && op == NULL) {//deve ser um label então
+	//Se op != null, na verdade encontramos um Operator
+	if(l>0 && op == NULL) {
 		printf("Acredito que a palavra seja um label.\n");
 
 		printf("Mas a pergunta é, ele é um label valido?\n");

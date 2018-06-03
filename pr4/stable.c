@@ -7,6 +7,7 @@
 // pega uma string e converte ela para um inteiro,
 // unsigned pra caber caso a string seja mto grande
 static unsigned int convert(const char* s) {
+    return 0;
     unsigned int k = 0;
     for(int i = 0; s[i] != '\0'; i++) {
         // base 179, porque é um número primo completamente arbitrario

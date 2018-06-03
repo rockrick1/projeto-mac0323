@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "parser.h"
+#include "optable.h"
+#include "list.h"
 #include "buffer.h"
 #include "error.h"
 
 int main(int argc, char **argv) {
     FILE *input = fopen(argv[1], "r");
+    FILE *getlabel = fopen(argv[1], "r");
+
+    
 
     printf("Dei file input\n");
     Buffer *B = buffer_create(sizeof(char));
@@ -14,6 +20,93 @@ int main(int argc, char **argv) {
     printf("Criei a table\n");
     Instruction *instr = NULL;
     printf("Criei a Instruction\n");
+
+
+    printf("\nVou procurar labels.\n");
+
+    int pos = 1; //linha que estamos
+    while(read_line(getlabel, B) != 0){
+
+        char *line = (char*)B->data;
+
+        int s = 0;  //start
+        int e = 0;  //end
+        int l = 0; //lenght
+
+        while(isspace(line[s])){
+            if(line[s]=='*' || line[s] == EOF ||line[s] == '\n') break;
+            s++;
+        }
+
+        e = s;
+
+        while(!isspace(line[e])){
+            if(line[e]=='*' || line[e] == EOF ||line[e] == '\n') break;
+            e++;
+        }
+
+        l = e - s;
+
+        printf("Achei uma palavra de tamanho %d\n",l);
+
+        if(l>0){
+
+            char word[l+1];
+            for(int i = 0; i<l; i++, s++) word[i] = line[s];
+            word[l] = '\0';
+            printf("A palavra é %s\n",word);
+
+            Operator *test;
+            test = optable_find(word);
+
+            if(test == NULL){
+
+                while(isspace(line[s])){
+                    if(line[s]=='*' || line[s] == EOF ||line[s] == '\n') break;
+                    s++;
+                }
+                e = s+1;
+
+                //Verifica se é um IS, que cuidamos depois
+                if(line[s] != 'I' || line[e] != 'S'){
+                    printf("Parece ser um label de endereço.\n");
+
+                    stable_insert(alias_table, word);
+
+                    //Cria um novo operando e coloca pos como valor dele
+                    Operand *op = operand_create_label(word);
+                    op->value.num = (octa)pos;
+
+                    stable_find(alias_table, word)->opd = op;
+                }
+                else{
+                    printf("Parece ser um label de atribuição.\n");
+                    stable_insert(alias_table, word);
+                }
+            }
+            else{
+                printf("Na verdade era um operator, continuando.\n");
+            }
+        }
+
+        printf("\n");
+        pos++;
+    }
+
+    printf("Procurei em %d linhas.\n",pos);
+    printf("Acredito ter achado todas as labels.\n");
+
+    printf("\nVou verificar os labels\n");
+
+            Node *n = alias_table->pos[0]->root;
+            while(n != NULL){
+                printf("%s ",n->key);
+                n = n->next;
+            }
+
+    printf("\n");
+
+    printf("Terminei\n");
 
     set_prog_name("parse_test");
 
@@ -41,16 +134,8 @@ int main(int argc, char **argv) {
 
             // lida com o IS, se for o caso
             if (op->opcode == IS) {
-                // se ja estiver na tabela, mete o loco
-                if (stable_find(alias_table, top->label))
-                    printf("erro poarr\n");
-                // senao, insere e altera o valor pra opds[0] (hopefully)
-                else {
-                    InsertionResult result;
-                    result = stable_insert(alias_table, top->label);
-                    stable_find(alias_table, top->label)->opd = top->opds[0];
-                }
-            }
+                stable_find(alias_table, top->label)->opd = top->opds[0];
+            }        
             // Operand opd = *top->opds[0];
         }
     }
