@@ -3,7 +3,6 @@
 #include <ctype.h>
 #include "parser.h"
 #include "optable.h"
-#include "list.h"
 #include "buffer.h"
 #include "error.h"
 
@@ -11,7 +10,6 @@ int main(int argc, char **argv) {
     FILE *input = fopen(argv[1], "r");
     FILE *getlabel = fopen(argv[1], "r");
 
-    
 
     printf("Dei file input\n");
     Buffer *B = buffer_create(sizeof(char));
@@ -21,6 +19,7 @@ int main(int argc, char **argv) {
     Instruction *instr = NULL;
     printf("Criei a Instruction\n");
 
+    const char *errptr;
 
     printf("\nVou procurar labels.\n");
 
@@ -51,15 +50,37 @@ int main(int argc, char **argv) {
 
         if(l>0){
 
-            char word[l+1];
+            char *word = malloc(sizeof(char)*(l+1));
             for(int i = 0; i<l; i++, s++) word[i] = line[s];
             word[l] = '\0';
             printf("A palavra é %s\n",word);
 
-            Operator *test;
+            const Operator *test;
             test = optable_find(word);
 
             if(test == NULL){
+
+                printf("Acredito que a palavra seja um label.\n");
+
+                printf("Mas a pergunta é, ele é um label valido? ");
+
+                if(!isalpha(word[0]) && word[0] != '_'){
+                    errptr = &line[s];
+                    set_error_msg("Invalid label name.");
+
+                    //Algo?
+                }
+
+                for(int j = 1; j<l; j++){
+                    if( !isalpha(word[j]) && word[0] != '_' && !isdigit(word[j]) ){
+                        errptr = &line[s];
+                        set_error_msg("Invalid label name.");
+
+                        //Algo?
+                    }
+                }
+
+                printf("Sim!\n");
 
                 while(isspace(line[s])){
                     if(line[s]=='*' || line[s] == EOF ||line[s] == '\n') break;
@@ -71,17 +92,32 @@ int main(int argc, char **argv) {
                 if(line[s] != 'I' || line[e] != 'S'){
                     printf("Parece ser um label de endereço.\n");
 
-                    stable_insert(alias_table, word);
+                    InsertionResult result;
+                    result = stable_insert(alias_table, word);
+
+                    if(result.new == 0){
+                         errptr = &line[s];
+                         set_error_msg("This label already exists");
+
+                         //Algo?
+                    }
 
                     //Cria um novo operando e coloca pos como valor dele
-                    Operand *op = operand_create_label(word);
-                    op->value.num = (octa)pos;
-
+                    Operand *op = operand_create_number(pos);
                     stable_find(alias_table, word)->opd = op;
                 }
                 else{
                     printf("Parece ser um label de atribuição.\n");
-                    stable_insert(alias_table, word);
+
+                    InsertionResult result;
+                    result = stable_insert(alias_table, word);
+
+                    if(result.new == 0){
+                        errptr = &line[s];
+                        set_error_msg("This label already exists");
+
+                        //Algo?
+                    }
                 }
             }
             else{
@@ -92,21 +128,10 @@ int main(int argc, char **argv) {
         printf("\n");
         pos++;
     }
+    
 
     printf("Procurei em %d linhas.\n",pos);
     printf("Acredito ter achado todas as labels.\n");
-
-    printf("\nVou verificar os labels\n");
-
-            Node *n = alias_table->pos[0]->root;
-            while(n != NULL){
-                printf("%s ",n->key);
-                n = n->next;
-            }
-
-    printf("\n");
-
-    printf("Terminei\n");
 
     set_prog_name("parse_test");
 
@@ -119,8 +144,6 @@ int main(int argc, char **argv) {
         	break;
 
         char *data = (char*)B->data;
-
-        const char *errptr;
 
         if (parse(data, alias_table, &instr, &errptr) == 0) {
             printf("deu ruim, to vazando\n");
@@ -139,6 +162,8 @@ int main(int argc, char **argv) {
             // Operand opd = *top->opds[0];
         }
     }
+
+    printf("Parei de olhar para as linhas, hora de libertar!\n");
 
     // libera as instruções
     Instruction *destroy, *next;

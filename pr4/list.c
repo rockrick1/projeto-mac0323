@@ -34,6 +34,17 @@ void lista_destroy(Lista *lista){
 
 InsertionResult lista_insert(Lista *lista, const char *key, EntryData val){
 	InsertionResult result;
+	Node *r = lista->root;
+
+	while(r != NULL){
+		if(strcmp(key,r->key)==0){
+			result.new = 0;
+			result.data = &val;
+			return result;
+		}
+		r = r->next;
+	}
+
 	Node* new = malloc(sizeof(Node));
 
 	result.new = 1;

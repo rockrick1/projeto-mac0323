@@ -1,6 +1,10 @@
 * Teste
-a      ADD     $0,$0,$0 *originalmente era a IS $0
-start  ADD     a,a,1
+a      IS $0
+b      IS $1
+c      IS $2
+d      IS $3
+start  ADD     $0,$0,$0
+one    ADD     a,a,1
        MUL     a,$2,$3     * Multiplica.
        JMP     start
-       DIV     a,2
+       DIV     a,b,2

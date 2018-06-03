@@ -57,38 +57,8 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	//Se op != null, na verdade encontramos um Operator
 	if(l>0 && op == NULL) {
-		printf("Acredito que a palavra seja um label.\n");
 
-		printf("Mas a pergunta é, ele é um label valido?\n");
-
-		if(!isalpha(label[0]) && label[0] != '_'){
-			*errptr = &s[k];
-			set_error_msg("Invalid label name.");
-
-			return 0;
-		}
-
-		for(int j = 1; j<l; j++){
-			if(!isalpha(label[j]) && label[0] != '_' && !isdigit(label[j])){
-				*errptr = &s[k];
-				set_error_msg("Invalid label name.");
-
-				return 0;
-			}
-		}
-
-		printf("Parece ser.\n");
-
-		//ve se já não colocaram essa label
 		printf("label: %s\n",label);
-		EntryData *test = stable_find(alias_table,label);
-
-		if(test != NULL) {
-			*errptr = &s[k];
-			set_error_msg("This label already exists");
-
-			return 0;
-		}
 
 	}
 	else { //é um OP então, olha que legal
@@ -290,10 +260,13 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			}
 			else{ // então é um label
 				printf("Parece que é um label de tipo %x \n",test->opd->type);
-				if(op->opd_types[z] == test->opd->type) { //verifica para o que a label aponta de verdade
+				if(op->opd_types[z] & test->opd->type) { //verifica para o que a label aponta de verdade
 					//cria novo operador caso a caso do label
 					if(test->opd->type & REGISTER)
 						opds[z] = operand_create_register(test->opd->value.num);
+					else if(test->opd->type & NUMBER_TYPE){
+						opds[z] = operand_create_number(test->opd->value.num);
+					}
 					else
 						opds[z] = operand_create_label(t_opd);
 				}
