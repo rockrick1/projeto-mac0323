@@ -40,14 +40,14 @@ int main(int argc, char **argv) {
             const Operator *op = top->op;
 
             // lida com o IS, se for o caso
-            if (op->opcode & IS) {
+            if (op->opcode == IS) {
                 // se ja estiver na tabela, mete o loco
                 if (stable_find(alias_table, top->label))
                     printf("erro poarr\n");
                 // senao, insere e altera o valor pra opds[0] (hopefully)
                 else {
-                    // InsertionResult result;
-                    // result = stable_insert(alias_table, top->label);
+                    InsertionResult result;
+                    result = stable_insert(alias_table, top->label);
                     stable_find(alias_table, top->label)->opd = top->opds[0];
                 }
             }
