@@ -188,12 +188,14 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			}
 		}
 
-		else if(isdigit(t_opd[0])){ // então deve ser um numero, né?
+		else if(isdigit(t_opd[0]) || ( t_opd[0] == '#' && l>1 ) ){ // então deve ser um numero, né?
 			printf("Parece que ele é um numero!\n");
 			if(op->opd_types[z] & NUMBER_TYPE){
 				printf("Vou calcular o numero.\n");
 				int num = 0;
-				for(int j = 0; j<l; j++){
+				int j = 0;
+				if(t_opd[0] == '#') j = 1;
+				for(; j<l; j++){
 					printf("somando: %c\n",t_opd[j]);
 					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
 						*errptr = &s[k];
