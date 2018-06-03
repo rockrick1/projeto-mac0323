@@ -223,7 +223,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		else if(isdigit(t_opd[0])){ // então deve ser um numero, né?
 			printf("Parece que ele é um numero!\n");
 			if(op->opd_types[z] & NUMBER_TYPE){
-				printf("Vou calcular o numero do registrador.\n");
+				printf("Vou calcular o numero.\n");
 				int num = 0;
 				for(int j = 0; j<l; j++){
 					printf("somando: %c\n",t_opd[j]);
