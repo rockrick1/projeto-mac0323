@@ -40,8 +40,7 @@ int main(int argc, char **argv) {
             const Operator *op = top->op;
 
             // lida com o IS, se for o caso
-            if (op->opcode == IS) {
-                printf("vo tentar colocar a label na stable\n");
+            if (op->opcode & IS) {
                 // se ja estiver na tabela, mete o loco
                 if (stable_find(alias_table, top->label))
                     printf("erro poarr\n");
@@ -49,9 +48,7 @@ int main(int argc, char **argv) {
                 else {
                     InsertionResult result;
                     result = stable_insert(alias_table, top->label);
-                    result.data->opd = top->opds[0];
-                    // ou isso
-                    // stable_find(alias_table, top->label)->opd = top->opds[0];
+                    stable_find(alias_table, top->label)->opd = top->opds[0];
                 }
             }
             // Operand opd = *top->opds[0];
@@ -60,7 +57,7 @@ int main(int argc, char **argv) {
 
     // libera as instruções
     Instruction *destroy, *next;
-    for (destroy = instr; destroy != NULL; destroy = next) {
+    for (destroy = instr; next != NULL; destroy = next) {
         next = destroy->next;
         instr_destroy(destroy);
         destroy = next;

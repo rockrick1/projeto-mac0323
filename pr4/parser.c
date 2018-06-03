@@ -35,11 +35,11 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	l = i-k;
 
 	printf("Preparando para copiar a palavra com %d chars.\n",l);
-	char t_label[l + 1]; //"test label"
-	for (int c = 0; c < l; c++, k++) t_label[c] = s[k];
-	t_label[l] = '\0';
+	char label[l + 1]; //"test label"
+	for (int c = 0; c < l; c++, k++) label[c] = s[k];
+	label[l] = '\0';
 	// printf("palavra: %s\n", t_label);
-	printf("Palavra copiada com sucesso.\n");
+	printf("Palavra copiada com sucesso, tamanho %d .\n",l);
 
 	// // remove a parte da label da linha, para mais facilidade na hora de
 	// // fazer o parse no resto
@@ -52,18 +52,34 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	while (isspace(s[i]) && s[i] != '\0') i++;
 	k = i;
 
-
-	char label[l + 1];
-
 	//se null, não é um OP, portanto label? Outros casos?
 	//E se o cara tiver escrito o comando errado?
 	//Acho que poderiamos contar quantas palavras temos na linha,
 	//se tiver 3, temos um label, caso contrario não.
-	op = optable_find(t_label);
+	op = optable_find(label);
 
-	if(op == NULL) {		//deve ser um label então
+	if(l>0 && op == NULL) {//deve ser um label então
 		printf("Acredito que a palavra seja um label.\n");
-		strcpy(label, t_label);
+
+		printf("Mas a pergunta é, ele é um label valido?\n");
+
+		if(!isalpha(label[0]) && label[0] != '_'){
+			*errptr = &s[k];
+			set_error_msg("Invalid label name.");
+
+			return 0;
+		}
+
+		for(int j = 1; j<l; j++){
+			if(!isalpha(label[j]) && label[0] != '_' && !isdigit(label[j])){
+				*errptr = &s[k];
+				set_error_msg("Invalid label name.");
+
+				return 0;
+			}
+		}
+
+		printf("Parece ser.\n");
 
 		//ve se já não colocaram essa label
 		printf("label: %s\n",label);
@@ -150,27 +166,25 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		l = i-k;
 		printf("Achei o fim do operand, de tamanho %d.\n",l);
 
-		if(op->opd_types[z] & OP_NONE && l != 0){ //ele não precisa mais de argumentos, mas achou um
+		if(op->opd_types[z] == OP_NONE && l != 0){ //ele não precisa mais de argumentos, mas achou um
 			*errptr = &s[k];
 			set_error_msg("Wrong number of operands.");
 			return 0;
 		}
 
 		printf("Vou começar a copiar esse operand.\n");
-		// strncpy chora com const char :japanese_goblin:
-		char tt_opd[l + 1];
-		for (int c = 0; c < l; c++, k++) tt_opd[c] = s[k];
-		tt_opd[l] = '\0';
-		printf("opd: %s\n", tt_opd);
-		// for(int j = 0; j < l; j++, k++) t_opd[j] = &s[k];
+
+		char t_opd[l + 1];
+		for (int c = 0; c < l; c++, k++) t_opd[c] = s[k];
+		t_opd[l] = '\0';
+		printf("opd: %s\n", t_opd);
+
 		printf("Operand copiado com sucesso.\n");
 
 
 		printf("Hora de verificar que tipo de Operand é esse!\n");
-		// fiz mais um opd pq const char é chato pra porra
-		const char *t_opd[l + 1];
-		strcpy((char*)t_opd, tt_opd);
-		if(tt_opd[0] == '$') {
+
+		if(t_opd[0] == '$') {
 			printf("Parece que ele é um registrador!\n");
 
 			// aqui fazemos uma operação bitwise para comparar os possiveis
@@ -185,8 +199,19 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					set_error_msg("Missing register number.");
 					return 0;
 				}
-				opds[z] = operand_create_register(
-					(unsigned char)strtol(t_opd[1], (char**)t_opd[l-1], 10));
+				printf("Vou calcular o numero do registrador.\n");
+				int num = 0;
+				for(int j = 1; j<l; j++){
+					printf("somando: %c\n",t_opd[j]);
+					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
+						*errptr = &s[k];
+						set_error_msg("Invalid register number.");
+						return 0;
+					}
+					num = num*10 + (t_opd[j] - '0'); //se fosse float, essa operação teria menos erro ;D
+				}
+				printf("Calculei: %d\n",num);
+				opds[z] = operand_create_register((unsigned char)num);
 			}
 			else {
 				*errptr = &s[k];
@@ -195,10 +220,22 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			}
 		}
 
-		else if(isdigit(tt_opd[0])){ // então deve ser um numero, né?
+		else if(isdigit(t_opd[0])){ // então deve ser um numero, né?
 			printf("Parece que ele é um numero!\n");
 			if(op->opd_types[z] & NUMBER_TYPE){
-				opds[z] = operand_create_number(strtoll(t_opd[1], (char**)t_opd[l-1], 10));
+				printf("Vou calcular o numero do registrador.\n");
+				int num = 0;
+				for(int j = 1; j<l; j++){
+					printf("somando: %c\n",t_opd[j]);
+					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
+						*errptr = &s[k];
+						set_error_msg("Invalid register number.");
+						return 0;
+					}
+					num = num*10 + (t_opd[j] - '0'); //se fosse float, essa operação teria menos erro ;D
+				}
+				printf("Calculei: %d\n",num);
+				opds[z] = operand_create_number((octa)num);
 			}
 			else{
 				*errptr = &s[k];
@@ -210,27 +247,61 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		else { //é uma string, fudeu
 			printf("Ele deve ser uma string ou um label.\n");
-			EntryData *test = stable_find(alias_table, tt_opd);
+			EntryData *test = stable_find(alias_table, t_opd);
 
 			if(test == NULL){ // então é uma string
-				printf("Parece que é uma string!\n");
-				if(op->opd_types[z] & STRING){
-					opds[z] = operand_create_string((char*)t_opd);
+				int num = -1;
+
+				if(l>1 && l<4 && t_opd[0] == 'r'){ //nenhum registrador especial 
+												  //com menos de 2 e mais de 4 chars
+					if(l == 3 && strcmp(t_opd,"rSP")){
+						num = 253;
+					}
+					else if(strcmp(t_opd,"rA")){
+						num = 255;
+					}
+					else if(strcmp(t_opd,"rR")){
+						num = 254;
+					}
+					else if(strcmp(t_opd,"rX")){
+						num = 252;
+					}
+					else if(strcmp(t_opd,"rY")){
+						num = 251;
+					}
+					else if(strcmp(t_opd,"rZ")){
+						num = 250;
+					}
+				}
+
+				printf("Parece que é uma string ou registrador de valor %d!\n",num);
+				if(num == -1 && op->opd_types[z] & STRING || num != -1 &&  op->opd_types[z] & REGISTER){
+					if(num == -1)
+						opds[z] = operand_create_string(t_opd);
+					else
+						opds[z] = operand_create_register((octa)num);
 				}
 				else {
 					*errptr = &s[k];
-					set_error_msg("Wrong operand type: Expected %hhx, got STRING.",op->opd_types[z]);
+					if(num == -1)
+						set_error_msg("Wrong operand type: Expected %hhx, got STRING.",op->opd_types[z]);
+					else
+						set_error_msg("Wrong operand type: Expected %hhx, got REGISTER.",op->opd_types[z]);
 					return 0;
 				}
 			}
-			else { // então é um label
-				printf("Parece que é um label!\n");
-				if(op->opd_types[z] & REGISTER) {
-					opds[z] = operand_create_label((char*)t_opd);
+			else{ // então é um label
+				printf("Parece que é um label de tipo %x \n",test->opd->type);
+				if(op->opd_types[z] == test->opd->type) { //verifica para o que a label aponta de verdade
+					//cria novo operador caso a caso do label
+					if(test->opd->type & REGISTER)
+						opds[z] = operand_create_register(test->opd->value.num);
+					else
+						opds[z] = operand_create_label(t_opd);
 				}
 				else {
 					*errptr = &s[k];
-					set_error_msg("Wrong operand type: Expected %hhx, got STRING.",op->opd_types[z]);
+					set_error_msg("Wrong operand type: Expected %hhx, got LABEL.",op->opd_types[z]);
 					return 0;
 				}
 			}
