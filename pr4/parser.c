@@ -150,7 +150,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		l = i-k;
 		printf("Achei o fim do operand, de tamanho %d.\n",l);
 
-		if(op->opd_types[z] == OP_NONE && l != 0){ //ele não precisa mais de argumentos, mas achou um
+		if(op->opd_types[z] & OP_NONE && l != 0){ //ele não precisa mais de argumentos, mas achou um
 			*errptr = &s[k];
 			set_error_msg("Wrong number of operands.");
 			return 0;
@@ -197,7 +197,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		else if(isdigit(tt_opd[0])){ // então deve ser um numero, né?
 			printf("Parece que ele é um numero!\n");
-			if(op->opd_types[z] == NUMBER_TYPE){
+			if(op->opd_types[z] & NUMBER_TYPE){
 				opds[z] = operand_create_number(strtoll(t_opd[1], (char**)t_opd[l-1], 10));
 			}
 			else{
@@ -210,11 +210,11 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 		else { //é uma string, fudeu
 			printf("Ele deve ser uma string ou um label.\n");
-			EntryData *test = stable_find(alias_table, (char*)t_opd);
+			EntryData *test = stable_find(alias_table, tt_opd);
 
 			if(test == NULL){ // então é uma string
 				printf("Parece que é uma string!\n");
-				if(op->opd_types[z] == STRING){
+				if(op->opd_types[z] & STRING){
 					opds[z] = operand_create_string((char*)t_opd);
 				}
 				else {
@@ -223,9 +223,9 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					return 0;
 				}
 			}
-			else{ // então é um label
+			else { // então é um label
 				printf("Parece que é um label!\n");
-				if(op->opd_types[z] == LABEL) {
+				if(op->opd_types[z] & REGISTER) {
 					opds[z] = operand_create_label((char*)t_opd);
 				}
 				else {

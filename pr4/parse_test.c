@@ -40,7 +40,8 @@ int main(int argc, char **argv) {
             const Operator *op = top->op;
 
             // lida com o IS, se for o caso
-            if (op->opcode & IS) {
+            if (op->opcode == IS) {
+                printf("vo tentar colocar a label na stable\n");
                 // se ja estiver na tabela, mete o loco
                 if (stable_find(alias_table, top->label))
                     printf("erro poarr\n");
@@ -59,7 +60,7 @@ int main(int argc, char **argv) {
 
     // libera as instruções
     Instruction *destroy, *next;
-    for (destroy = instr; next != NULL; destroy = next) {
+    for (destroy = instr; destroy != NULL; destroy = next) {
         next = destroy->next;
         instr_destroy(destroy);
         destroy = next;
