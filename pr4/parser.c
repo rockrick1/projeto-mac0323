@@ -252,7 +252,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			if(test == NULL){ // então é uma string
 				int num = -1;
 
-				if(l>1 && l<4 && t_opd[0] == 'r'){ //nenhum registrador especial 
+				if(l>1 && l<4 && t_opd[0] == 'r'){ //nenhum registrador especial
 												  //com menos de 2 e mais de 4 chars
 					if(l == 3 && strcmp(t_opd,"rSP")){
 						num = 253;
@@ -275,7 +275,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 				}
 
 				printf("Parece que é uma string ou registrador de valor %d!\n",num);
-				if(num == -1 && op->opd_types[z] & STRING || num != -1 &&  op->opd_types[z] & REGISTER){
+				if((num == -1 && op->opd_types[z] & STRING) || (num != -1 &&  op->opd_types[z] & REGISTER)){
 					if(num == -1)
 						opds[z] = operand_create_string(t_opd);
 					else
