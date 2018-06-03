@@ -225,7 +225,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			if(op->opd_types[z] & NUMBER_TYPE){
 				printf("Vou calcular o numero do registrador.\n");
 				int num = 0;
-				for(int j = 1; j<l; j++){
+				for(int j = 0; j<l; j++){
 					printf("somando: %c\n",t_opd[j]);
 					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
 						*errptr = &s[k];
