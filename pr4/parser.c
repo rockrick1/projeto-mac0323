@@ -117,9 +117,9 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	// identifica quantos operandos sao necessarios
 	int operands = 3;
-	if (op->opd_types[2] == OP_NONE) operands = 2;
-	if (op->opd_types[1] == OP_NONE) operands = 1;
-	if (op->opd_types[0] == OP_NONE) operands = 0;
+	if (op->opd_types[2] == OP_NONE){ operands = 2; opds[2] = NULL; }
+	if (op->opd_types[1] == OP_NONE){ operands = 1; opds[1] = NULL; }
+	if (op->opd_types[0] == OP_NONE){ operands = 0; opds[0] = NULL; }
 
 	for(int z = 0; z < operands; z++){
 
@@ -192,7 +192,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		else if(isdigit(t_opd[0]) || ( t_opd[0] == '#' && l>1 ) ){ // então deve ser um numero, né?
 			//test printf("Parece que ele é um numero!\n");
 			if(op->opd_types[z] & NUMBER_TYPE){
-				printf("Vou calcular o numero.\n");
+				//test printf("Vou calcular o numero.\n");
 				int num = 0;
 				int j = 0;
 				if(t_opd[0] == '#') j = 1;

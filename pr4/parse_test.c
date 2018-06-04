@@ -12,17 +12,17 @@ int main(int argc, char **argv) {
     FILE *getlabel = fopen(argv[1], "r");
 
 
-    printf("Dei file input\n");
+    //printf("Dei file input\n");
     Buffer *B = buffer_create(sizeof(char));
-    printf("Criei o buffer\n");
+    //printf("Criei o buffer\n");
     SymbolTable alias_table = stable_create(29);
-    printf("Criei a table\n");
+    //printf("Criei a table\n");
     Instruction *instr = NULL;
-    printf("Criei a Instruction\n");
+    //printf("Criei a Instruction\n");
 
     const char *errptr;
 
-    printf("\nVou procurar labels.\n");
+    //printf("\nVou procurar labels.\n");
 
     int pos = 1; //linha que estamos
     while(read_line(getlabel, B) != 0){
@@ -47,23 +47,23 @@ int main(int argc, char **argv) {
 
         l = e - s;
 
-        printf("Achei uma palavra de tamanho %d\n",l);
+        //printf("Achei uma palavra de tamanho %d\n",l);
 
         if(l>0){
 
             char *word = malloc(sizeof(char)*(l+1));
             for(int i = 0; i<l; i++, s++) word[i] = line[s];
             word[l] = '\0';
-            printf("A palavra é %s\n",word);
+            //printf("A palavra é %s\n",word);
 
             const Operator *test;
             test = optable_find(word);
 
             if(test == NULL){
 
-                printf("Acredito que a palavra seja um label.\n");
+                //printf("Acredito que a palavra seja um label.\n");
 
-                printf("Mas a pergunta é, ele é um label valido? ");
+                //printf("Mas a pergunta é, ele é um label valido? ");
 
                 if(!isalpha(word[0]) && word[0] != '_'){
                     errptr = &line[s];
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
                     }
                 }
 
-                printf("Sim!\n");
+                //printf("Sim!\n");
 
                 while(isspace(line[s])){
                     if(line[s]=='*' || line[s] == EOF ||line[s] == '\n') break;
@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
 
                 //Verifica se é um IS, que cuidamos depois
                 if(line[s] != 'I' || line[e] != 'S'){
-                    printf("Parece ser um label de endereço.\n");
+                    //printf("Parece ser um label de endereço.\n");
 
                     InsertionResult result;
                     result = stable_insert(alias_table, word);
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
                     stable_find(alias_table, word)->opd = op;
                 }
                 else{
-                    printf("Parece ser um label de atribuição.\n");
+                    //printf("Parece ser um label de atribuição.\n");
 
                     InsertionResult result;
                     result = stable_insert(alias_table, word);
@@ -122,24 +122,24 @@ int main(int argc, char **argv) {
                 }
             }
             else{
-                printf("Na verdade era um operator, continuando.\n");
+                //printf("Na verdade era um operator, continuando.\n");
             }
         }
 
-        printf("\n");
+        //printf("\n");
         pos++;
     }
     
 
-    printf("Procurei em %d linhas.\n",pos);
-    printf("Acredito ter achado todas as labels.\n");
+    //printf("Procurei em %d linhas.\n",pos);
+   //printf("Acredito ter achado todas as labels.\n");
 
     set_prog_name("parse_test");
 
     // passa por todas as linhas do codigo
     for (int line = 1;; line++) {
 
-    	printf("\nDentro do for, linha %d\n",line);
+    	//printf("\nDentro do for, linha %d\n",line);
         // le a linha de codigo e poe no buffer
         if(read_line(input, B) == 0)
         	break;
@@ -154,6 +154,13 @@ int main(int argc, char **argv) {
 
         if (instr != NULL)
         {
+        	Instruction *top = instr;
+        	const Operator *op = top->op;
+
+        	if (op->opcode == IS) {
+                stable_find(alias_table, top->label)->opd = top->opds[0];
+            }   
+
             printf("line     = %s", data);
             if (data[strlen(data)-1] != '\n') printf("\n");
             if (instr->label[0] == '\0')
@@ -162,34 +169,32 @@ int main(int argc, char **argv) {
             }
             else
             {
-                printf("label    = %s\n", instr->label);
+                printf("label    = %s\n", top->label);
             }
-            printf("operator = %s\n", instr->op->name);
-            printf("\nSerá que eu passei do operator? Parece que sim\n\n");
+            printf("operator = %s\n", op->name);
             printf("operands = ");
 
             //aqui vão acontecer firulas
 
             int count = 0;
-            while (instr->opds != NULL && count < 3)
+            while (top->opds[count] != NULL && count < 3)
             {
-                printf("\nentrei no while\n");
                 if (count != 0) printf(", ");
                 if (instr->opds[count]->type == REGISTER)
                 {
-                    printf("Register(%d)", instr->opds[count]->value);
+                    printf("Register(%d)", (int)instr->opds[count]->value.num);
                 }
                 if (instr->opds[count]->type == LABEL)
                 {
-                    printf("Label(\"%s\")", instr->opds[count]->value);
+                    printf("Label(\"%s\")", instr->opds[count]->value.label);
                 }
                 if (instr->opds[count]->type == NUMBER_TYPE)
                 {
-                    printf("Number(%d)", instr->opds[count]->value);
+                    printf("Number(%d)", (int)instr->opds[count]->value.num);
                 }
-                if (instr->opds[count]->type == NUMBER_TYPE)
+                if (instr->opds[count]->type == STRING)
                 {
-                    printf("String(%s)", instr->opds[count]->value);
+                    printf("String(%s)", instr->opds[count]->value.str);
                 }
                 count++;
             }
@@ -197,16 +202,6 @@ int main(int argc, char **argv) {
             printf("\n\n");
         }
 
-        if (instr != NULL) {
-            Instruction *top = instr;
-            const Operator *op = top->op;
-
-            // lida com o IS, se for o caso
-            if (op->opcode == IS) {
-                stable_find(alias_table, top->label)->opd = top->opds[0];
-            }        
-            // Operand opd = *top->opds[0];
-        }
     }
 
     printf("Parei de olhar para as linhas, hora de libertar!\n");
