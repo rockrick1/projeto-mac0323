@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 #include "parser.h"
 #include "optable.h"
 #include "buffer.h"
@@ -149,6 +150,51 @@ int main(int argc, char **argv) {
             printf("deu ruim, to vazando\n");
             print_error_msg(NULL);
             break;
+        }
+
+        if (instr != NULL)
+        {
+            printf("line     = %s", data);
+            if (data[strlen(data)-1] != '\n') printf("\n");
+            if (instr->label[0] == '\0')
+            {
+                printf("label    = n/a\n");
+            }
+            else
+            {
+                printf("label    = %s\n", instr->label);
+            }
+            printf("operator = %s\n", instr->op->name);
+            printf("\nSerá que eu passei do operator? Parece que sim\n\n");
+            printf("operands = ");
+
+            //aqui vão acontecer firulas
+
+            int count = 0;
+            while (instr->opds != NULL && count < 3)
+            {
+                printf("\nentrei no while\n");
+                if (count != 0) printf(", ");
+                if (instr->opds[count]->type == REGISTER)
+                {
+                    printf("Register(%d)", instr->opds[count]->value);
+                }
+                if (instr->opds[count]->type == LABEL)
+                {
+                    printf("Label(\"%s\")", instr->opds[count]->value);
+                }
+                if (instr->opds[count]->type == NUMBER_TYPE)
+                {
+                    printf("Number(%d)", instr->opds[count]->value);
+                }
+                if (instr->opds[count]->type == NUMBER_TYPE)
+                {
+                    printf("String(%s)", instr->opds[count]->value);
+                }
+                count++;
+            }
+
+            printf("\n\n");
         }
 
         if (instr != NULL) {
