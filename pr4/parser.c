@@ -8,7 +8,7 @@
 
 int parse(const char *s, SymbolTable alias_table, Instruction **instr, const char **errptr){
 
-	printf("\nEntrei no parse!\n");
+	//test printf("\nEntrei no parse!\n");
 
 	//Assumo que o buffer tira todos os espaços antes do começo da palavra
 
@@ -27,7 +27,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	}
 
 	if (i == 0 && (s[i] == '\n' || s[i] == '*' || s[i] == EOF)) {
-		printf("Achei uma linha sem codigo, vou voltar.\n");
+		//test printf("Achei uma linha sem codigo, vou voltar.\n");
 		return 1;
 	}
 
@@ -37,15 +37,15 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	//Copia a palavra se ela existir
 	if(l>0){
-		printf("Preparando para copiar a palavra com %d chars.\n",l);
+		//test printf("Preparando para copiar a palavra com %d chars.\n",l);
 
 		for (int c = 0; c < l; c++, k++) label[c] = s[k];
 		label[l] = '\0';
 
-		printf("Palavra copiada com sucesso, tamanho %d .\n",l);
+		//test printf("Palavra copiada com sucesso, tamanho %d .\n",l);
 	}
 	else{
-		printf("Encontrei uma palavra vazia.\n");
+		//test printf("Encontrei uma palavra vazia.\n");
 	}
 
 
@@ -58,11 +58,11 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	//Se op != null, na verdade encontramos um Operator
 	if(l>0 && op == NULL) {
 
-		printf("label: %s\n",label);
+		//test printf("label: %s\n",label);
 
 	}
 	else { //é um OP então, olha que legal
-		printf("Acredito que a palavra seja um operator.\n");
+		//test printf("Acredito que a palavra seja um operator.\n");
 
 		// não sei se precisa de algo aqui TBH
 		// seria para deixar um o op guardado,
@@ -73,14 +73,14 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	}
 
 	if(label !=  NULL) { //então temos que procurar o op
-		printf("\nVou começar a procurar o operator!\n");
+		//test printf("\nVou começar a procurar o operator!\n");
 
 		while(isspace(s[k])) k++; //acha o inicio da palavra
-		printf("Achei o começo da palavra.\n");
+		//test printf("Achei o começo da palavra.\n");
 		i = k;
 		// acha o fim da palavra
 		while(!isspace(s[i]) && s[i] != '\0') i++;
-		printf("Achei o fim da palavra.\n");
+		//test printf("Achei o fim da palavra.\n");
 		/*
 		if(s[i]=='\n' || s[i]=='*' || s[i]==EOF){
 			errptr = &s[k];							Acho que o teste abaixo já resolve esse caso,
@@ -90,13 +90,14 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		*/
 
 		l = i-k;
+		
 
-		printf("Preparando para copiar a palavra com %d chars.\n",l);
+		//test printf("Preparando para copiar a palavra com %d chars.\n",l);
 		char t_op[l + 1];
 		for (int c = 0; c < l; c++, k++) t_op[c] = s[k];
 		t_op[l] = '\0';
-		printf("operator: %s\n", t_op);
-		printf("Palavra copiada com sucesso.\n");
+		//test printf("operator: %s\n", t_op);
+		//test printf("Palavra copiada com sucesso.\n");
 
 		op = optable_find(t_op);
 
@@ -108,13 +109,13 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	}
 
-	printf("\nIndo pegar os operands.\n");
+	//test printf("\nIndo pegar os operands.\n");
 
 	//Deem uma olhada no optable.c
 	//Basicamente cada operator tem um vertor com o que ele precisa.
 	//Se não precisar de argumentos, ele fala OP_NONE, assim:
 
-	// identifica quantos oerandos sao necessarios
+	// identifica quantos operandos sao necessarios
 	int operands = 3;
 	if (op->opd_types[2] == OP_NONE) operands = 2;
 	if (op->opd_types[1] == OP_NONE) operands = 1;
@@ -122,17 +123,17 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 	for(int z = 0; z < operands; z++){
 
-		printf("\n\nVou procurar o operand %d!\n",z);
+		//test printf("\n\nVou procurar o operand %d!\n",z);
 
 		k = i;
 		while(isspace(s[k])) k++; //acha o inicio do argumento
-		printf("Achei o inicio do operand.\n");
+		//test printf("Achei o inicio do operand.\n");
 		i = k;
 		// acha o fim do argumento
 		while(!isspace(s[i]) && s[i] != ',' && s[i] != '\0' && s[i] != EOF) i++;
 
 		l = i-k;
-		printf("Achei o fim do operand, de tamanho %d.\n",l);
+		//test printf("Achei o fim do operand, de tamanho %d.\n",l);
 
 		if(op->opd_types[z] == OP_NONE && l != 0){ //ele não precisa mais de argumentos, mas achou um
 			*errptr = &s[k];
@@ -140,20 +141,20 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			return 0;
 		}
 
-		printf("Vou começar a copiar esse operand.\n");
+		//test printf("Vou começar a copiar esse operand.\n");
 
 		char t_opd[l + 1];
 		for (int c = 0; c < l; c++, k++) t_opd[c] = s[k];
 		t_opd[l] = '\0';
-		printf("opd: %s\n", t_opd);
+		//test printf("opd: %s\n", t_opd);
 
-		printf("Operand copiado com sucesso.\n");
+		//test printf("Operand copiado com sucesso.\n");
 
 
-		printf("Hora de verificar que tipo de Operand é esse!\n");
+		//test printf("Hora de verificar que tipo de Operand é esse!\n");
 
 		if(t_opd[0] == '$') {
-			printf("Parece que ele é um registrador!\n");
+			//test printf("Parece que ele é um registrador!\n");
 
 			// aqui fazemos uma operação bitwise para comparar os possiveis
 			// tipos do operando com os aceitados pelo operador
@@ -167,10 +168,10 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					set_error_msg("Missing register number.");
 					return 0;
 				}
-				printf("Vou calcular o numero do registrador.\n");
+				//test printf("Vou calcular o numero do registrador.\n");
 				int num = 0;
 				for(int j = 1; j<l; j++){
-					printf("somando: %c\n",t_opd[j]);
+					//test printf("somando: %c\n",t_opd[j]);
 					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
 						*errptr = &s[k];
 						set_error_msg("Invalid register number.");
@@ -178,7 +179,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					}
 					num = num*10 + (t_opd[j] - '0'); //se fosse float, essa operação teria menos erro ;D
 				}
-				printf("Calculei: %d\n",num);
+				//test printf("Calculei: %d\n",num);
 				opds[z] = operand_create_register((unsigned char)num);
 			}
 			else {
@@ -189,14 +190,14 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		}
 
 		else if(isdigit(t_opd[0]) || ( t_opd[0] == '#' && l>1 ) ){ // então deve ser um numero, né?
-			printf("Parece que ele é um numero!\n");
+			//test printf("Parece que ele é um numero!\n");
 			if(op->opd_types[z] & NUMBER_TYPE){
 				printf("Vou calcular o numero.\n");
 				int num = 0;
 				int j = 0;
 				if(t_opd[0] == '#') j = 1;
 				for(; j<l; j++){
-					printf("somando: %c\n",t_opd[j]);
+					//test printf("somando: %c\n",t_opd[j]);
 					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
 						*errptr = &s[k];
 						set_error_msg("Invalid register number.");
@@ -204,7 +205,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					}
 					num = num*10 + (t_opd[j] - '0'); //se fosse float, essa operação teria menos erro ;D
 				}
-				printf("Calculei: %d\n",num);
+				//test printf("Calculei: %d\n",num);
 				opds[z] = operand_create_number((octa)num);
 			}
 			else{
@@ -216,7 +217,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 
 
 		else { //é uma string, fudeu
-			printf("Ele deve ser uma string ou um label.\n");
+			//test printf("Ele deve ser uma string ou um label.\n");
 			EntryData *test = stable_find(alias_table, t_opd);
 
 			if(test == NULL){ // então é uma string
@@ -244,7 +245,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					}
 				}
 
-				printf("Parece que é uma string ou registrador de valor %d!\n",num);
+				//test printf("Parece que é uma string ou registrador de valor %d!\n",num);
 				if((num == -1 && op->opd_types[z] & STRING) || (num != -1 &&  op->opd_types[z] & REGISTER)){
 					if(num == -1)
 						opds[z] = operand_create_string(t_opd);
@@ -261,7 +262,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 				}
 			}
 			else{ // então é um label
-				printf("Parece que é um label de tipo %x \n",test->opd->type);
+				//test printf("Parece que é um label de tipo %x \n",test->opd->type);
 				if(op->opd_types[z] & test->opd->type) { //verifica para o que a label aponta de verdade
 					//cria novo operador caso a caso do label
 					if(test->opd->type & REGISTER)
@@ -283,15 +284,17 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		i++;
 	}
 
-	printf("\nAchei todos os operands.\n");
+	//test printf("\nAchei todos os operands.\n");
 
-	printf("Vou criar a nova instrução.\n");
+	//test printf("Vou criar a nova instrução.\n");
 	Instruction *new = instr_create(label,op,opds);	//Cria a instruction nova
-	printf("Vou fazer ela apontar para o começo da lista.\n");
+	//test printf("Vou fazer ela apontar para o começo da lista.\n");
 	new->next = *instr;								//Faz ela apontar para a instrução anterior
-	printf("Vou colocar ela no começo da lista.\n");
+	//test printf("Vou colocar ela no começo da lista.\n");
 	*instr = new;									//Agora ela está no topo
-	printf("Pronto! Tudo parece ter sido feito!\n");
+	//test printf("Pronto! Tudo parece ter sido feito!\n");
+
+
 
 
 	// A gente precisa dar frees aqui etc?
