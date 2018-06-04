@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
 
     }
 
-    printf("Parei de olhar para as linhas, hora de libertar!\n");
+    //test printf("Parei de olhar para as linhas, hora de libertar!\n");
 
     // libera as instruções
     Instruction *destroy, *next;
