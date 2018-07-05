@@ -9,16 +9,51 @@
 #include "asm.h"
 
 int assemble(const char *filename, FILE *input, FILE *output) {
-    FILE *getlabel = input;
+    FILE *getlabel = fopen(filename, "r");
 
     Buffer *B = buffer_create(sizeof(char));
     SymbolTable alias_table = stable_create(29);
+    SymbolTable label_table = stable_create(29);
+    SymbolTable extern_table = stable_create(29);
     Instruction *instr = NULL;
+
+
+    //Inserir os registradores especiais
+    InsertionResult result;
+    Operand *op;
+
+    result = stable_insert(alias_table, "rSP");
+    op = operand_create_register((unsigned char)253);
+    stable_find(alias_table, "rSP")->opd = op;
+
+    result = stable_insert(alias_table, "rA");
+    op = operand_create_register((unsigned char)255);
+    stable_find(alias_table, "rA")->opd = op;
+
+    result = stable_insert(alias_table, "rR");
+    op = operand_create_register((unsigned char)254);
+    stable_find(alias_table, "rR")->opd = op;
+
+    result = stable_insert(alias_table, "rX");
+    op = operand_create_register((unsigned char)252);
+    stable_find(alias_table, "rX")->opd = op;
+
+    result = stable_insert(alias_table, "rY");
+    op = operand_create_register((unsigned char)251);
+    stable_find(alias_table, "rY")->opd = op;
+
+    result = stable_insert(alias_table, "rZ");
+    op = operand_create_register((unsigned char)250);
+    stable_find(alias_table, "rZ")->opd = op;
 
     const char *errptr;
 
+    printf("Indo pegar os labels\n");
+
     int pos = 1; //linha que estamos
     while(read_line(getlabel, B) != 0){
+
+        printf("linhas %d\n",pos);
 
         char *line = (char*)B->data;
 
@@ -69,7 +104,7 @@ int assemble(const char *filename, FILE *input, FILE *output) {
                 }
                 e = s+1;
 
-                if(line[s] != 'I' || line[e] != 'S'){
+                if(line[s] == 'I' && line[e] == 'S'){
 
                     InsertionResult result;
                     result = stable_insert(alias_table, word);
@@ -79,18 +114,77 @@ int assemble(const char *filename, FILE *input, FILE *output) {
                          set_error_msg("This label already exists");
                     }
 
-                    Operand *op = operand_create_label(word);
+                    //Procurar o registrador do IS
+
+                    s = e+1;
+
+                    while(isspace(line[s])){
+                        if(line[s]=='*' || line[s] == EOF ||line[s] == '\n') break;
+                        s++;
+                    }
+
+                    if(line[s]!='$'){
+                        errptr = &line[s];
+                        set_error_msg("Missing Register");
+                    }
+
+                    s = s+1;
+                    e = s;
+
+                    while(!isspace(line[e])){
+                        if(line[e]=='*' || line[e] == EOF ||line[e] == '\n') break;
+                        e++;
+                    }
+
+                    int num = 0;
+
+                    for(int j = s; j<e; j++){
+                        if(!isdigit(line[j])){ //evitar algo do tipo "$1a"
+                            errptr = &line[s];
+                            set_error_msg("Invalid register number.");
+                        }
+                        num = num*10 + (line[j] - '0');
+                    }
+
+                    Operand *op = operand_create_register((unsigned char)num);
                     stable_find(alias_table, word)->opd = op;
+
                 }
                 else{
 
+                    while(!isspace(line[e])){
+                        if(line[e]=='*' || line[e] == EOF ||line[e] == '\n') break;
+                        e++;
+                    }
+
+                    //Verfica se não existe um EXTERN depois do Label
+
+                    l = e-s;
+                    int ext = l;
+                    char* op = "EXTERN";
+
+                    for(int i = 0; i<l; i++,s++){
+                        if(line[s]!=op[i])
+                            break;
+                        ext--;
+                    }
+
+                    //Se ext = 0, todas as letras são iguais
+
+                    if(!ext){
+                        errptr = &line[s];
+                        set_error_msg("Defining label before EXTERN");
+                    }
+
                     InsertionResult result;
-                    result = stable_insert(alias_table, word);
+                    result = stable_insert(label_table, word);
 
                     if(result.new == 0){
                         errptr = &line[s];
                         set_error_msg("This label already exists");
                     }
+
+                    stable_find(label_table, word)->i = pos;
                 }
             }
         }
@@ -98,26 +192,38 @@ int assemble(const char *filename, FILE *input, FILE *output) {
         pos++;
     }
     
+    printf("Nome do programa\n");
+
     set_prog_name(filename);
+
+    printf("Pegar as instruções\n");
 
     // passa por todas as linhas do codigo
     for (int line = 1;; line++) {
+
+        printf("\nLer linha %d\n",line);
 
         if(read_line(input, B) == 0)
         	break;
 
         char *data = (char*)B->data;
 
-        if (parse(data, alias_table, &instr, &errptr) == 0) {
+        printf("Vou mandar para o parse\n");
+
+        if (parse(data, alias_table, label_table, extern_table, &instr, &errptr) == 0) {
             print_error_msg(NULL);
             break;
         }
 
+        printf("Voltei do parse\n");
+
         if (instr != NULL)
         {
+            printf("Instrução não nula\n");
         	Instruction *top = instr;
         	const Operator *op = top->op;
 
+            printf("Vou ver se é um IS\n");
         	if (op->opcode == IS) {
                 stable_find(alias_table, top->label)->opd = top->opds[0];
             }   
@@ -204,7 +310,7 @@ int main(int argc, char **argv) {
     FILE *input = fopen(argv[1], "r");
     FILE *output = fopen(filename, "w");
 
-    assemble(filename,input,output);
+    assemble(argv[1],input,output);
 
     fclose(input);
     fclose(output);

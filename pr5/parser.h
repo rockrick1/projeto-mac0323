@@ -24,7 +24,7 @@
   empty. On error, *errptr, if non-NULL, points to the character in s
   where the error was found.
 */
-int parse(const char *s, SymbolTable alias_table, Instruction **instr,
-          const char **errptr);
+int parse(const char *s, SymbolTable alias_table, SymbolTable label_table,
+          SymbolTable extern_table, Instruction **instr, const char **errptr);
 
 #endif

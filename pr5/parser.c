@@ -6,7 +6,8 @@
 #include <string.h>
 #include <ctype.h>
 
-int parse(const char *s, SymbolTable alias_table, Instruction **instr, const char **errptr){
+int parse(const char *s, SymbolTable alias_table, SymbolTable label_table,
+          SymbolTable extern_table, Instruction **instr, const char **errptr){
 
 	int k = 0; //indice do começo da palavra
 	int i = 0; //indice que percorre s / indice do fim da palavra
@@ -35,14 +36,15 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		label[l] = '\0';
 	}
 
-
 	// coloca i e k no inicio da proxima palavra
 	while (isspace(s[i]) && s[i] != '\0') i++;
 	k = i;
 
 	op = optable_find(label);
 
-	if(label !=  NULL) { //então temos que procurar o op
+	if(op ==  NULL) { //então temos que procurar o op
+
+		printf(">Não era um OP, aparentemente.\n");
 
 		while(isspace(s[k])) k++;
 		i = k;
@@ -62,6 +64,8 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			return 0; 							//Assumimos que falta o op.
 		}
 
+		printf(">%s é o OP que encontrei.\n",t_op);
+
 	}
 
 	// identifica quantos operandos sao necessarios
@@ -70,7 +74,11 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 	if (op->opd_types[1] == OP_NONE){ operands = 1; opds[1] = NULL; }
 	if (op->opd_types[0] == OP_NONE){ operands = 0; opds[0] = NULL; }
 
+	printf(">Precisamos de %d openrads\n",operands);
+
 	for(int z = 0; z < operands; z++){
+
+		printf(">Indo encontrar o openrand %d\n",z);
 
 		k = i;
 		while(isspace(s[k])) k++; //acha o inicio do argumento
@@ -89,6 +97,8 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		for (int c = 0; c < l; c++, k++) t_opd[c] = s[k];
 		t_opd[l] = '\0';
 
+		printf(">Achei %s\n", t_opd);
+
 		if(t_opd[0] == '$') {
 
 			// aqui fazemos uma operação bitwise para comparar os possiveis
@@ -96,6 +106,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			//
 			// creditos para essa pagina:
 			// https://paca.ime.usp.br/mod/forum/discuss.php?d=38234
+
 			if(op->opd_types[z] & REGISTER) {
 				//Isso signigica que o cara só mandou um '$'
 				if(l < 2) {
@@ -113,6 +124,7 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 					}
 					num = num*10 + (t_opd[j] - '0');
 				}
+				printf(">É um registrador de num %d\n",num);
 				opds[z] = operand_create_register((unsigned char)num);
 			}
 			else {
@@ -123,22 +135,19 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 		}
 
 		else if(isdigit(t_opd[0]) || ( t_opd[0] == '#' && l>1 ) ){ // então deve ser um numero, né?
-			//test printf("Parece que ele é um numero!\n");
+
 			if(op->opd_types[z] & NUMBER_TYPE){
-				//test printf("Vou calcular o numero.\n");
 				int num = 0;
 				int j = 0;
 				if(t_opd[0] == '#') j = 1;
 				for(; j<l; j++){
-					//test printf("somando: %c\n",t_opd[j]);
 					if(!isdigit(t_opd[j])){ //evitar algo do tipo "$1a"
 						*errptr = &s[k];
 						set_error_msg("Invalid register number.");
 						return 0;
 					}
-					num = num*10 + (t_opd[j] - '0'); //se fosse float, essa operação teria menos erro ;D
+					num = num*10 + (t_opd[j] - '0');
 				}
-				//test printf("Calculei: %d\n",num);
 				opds[z] = operand_create_number((octa)num);
 			}
 			else{
@@ -148,64 +157,41 @@ int parse(const char *s, SymbolTable alias_table, Instruction **instr, const cha
 			}
 		}
 
-		else { //é uma string
+		else { //é o que então?
 			EntryData *test = stable_find(alias_table, t_opd);
 
-			if(test == NULL){ // então é uma string
-				int num = -1;
+			if(test == NULL){ // então não é um label - registrador
 
-				if(l>1 && l<4 && t_opd[0] == 'r'){ //nenhum registrador especial
-												   //com menos de 2 e mais de 4 chars
-					if(l == 3 && strcmp(t_opd,"rSP")){
-						num = 253;
-					}
-					else if(strcmp(t_opd,"rA")){
-						num = 255;
-					}
-					else if(strcmp(t_opd,"rR")){
-						num = 254;
-					}
-					else if(strcmp(t_opd,"rX")){
-						num = 252;
-					}
-					else if(strcmp(t_opd,"rY")){
-						num = 251;
-					}
-					else if(strcmp(t_opd,"rZ")){
-						num = 250;
-					}
-				}
+				test = stable_find(label_table, t_opd);
 
-				//test printf("Parece que é uma string ou registrador de valor %d!\n",num);
-				if((num == -1 && op->opd_types[z] & STRING) || (num != -1 &&  op->opd_types[z] & REGISTER)){
-					if(num == -1)
+				if(test == NULL){
+					if(op->opd_types[z] & STRING){
 						opds[z] = operand_create_string(t_opd);
-					else
-						opds[z] = operand_create_register((octa)num);
-				}
-				else {
-					*errptr = &s[k];
-					if(num == -1)
+					}
+					else {
+						*errptr = &s[k];
 						set_error_msg("Wrong operand type: Expected %hhx, got STRING.",op->opd_types[z]);
-					else
-						set_error_msg("Wrong operand type: Expected %hhx, got REGISTER.",op->opd_types[z]);
-					return 0;
+						return 0;
+					}
+				}
+				else{
+					if(op->opd_types[z] & LABEL){
+						opds[z] = operand_create_label(t_opd);
+					}
+					else {
+						*errptr = &s[k];
+						set_error_msg("Wrong operand type: Expected %hhx, got LABEL.",op->opd_types[z]);
+						return 0;
+					}
 				}
 			}
-			else{ // é um label
-				if(op->opd_types[z] & test->opd->type) { //verifica para o que a label aponta de verdade
-					//cria novo operador caso a caso do label
-					if(test->opd->type & REGISTER)
+			else{ // é um label-registrador
+				if(op->opd_types[z] & REGISTER) { //verifica para o que a label aponta de verdade
 						opds[z] = operand_create_register(test->opd->value.num);
-					else if(test->opd->type & NUMBER_TYPE){
-						opds[z] = operand_create_number(test->opd->value.num);
-					}
-					else
-						opds[z] = operand_create_label(t_opd);
 				}
 				else {
 					*errptr = &s[k];
-					set_error_msg("Wrong operand type: Expected %hhx, got LABEL.",op->opd_types[z]);
+					set_error_msg("Wrong operand type: Expected %hhx, got REGISTER.",op->opd_types[z]);
 					return 0;
 				}
 			}
