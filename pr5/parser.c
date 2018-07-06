@@ -183,6 +183,11 @@ int parse(const char *s, SymbolTable alias_table, SymbolTable label_table,
 						set_error_msg("Wrong operand type: Expected %hhx, got LABEL.",op->opd_types[z]);
 						return 0;
 					}
+					if(!strcmp(op->name,"EXTERN")){
+						printf(">Vou adicionar um label extern\n");
+						stable_insert(extern_table, t_opd);
+    					stable_find(extern_table, t_opd)->i = test->i;
+					}
 				}
 			}
 			else{ // é um label-registrador

@@ -9,6 +9,9 @@
 #include "asm.h"
 
 int assemble(const char *filename, FILE *input, FILE *output) {
+
+    set_prog_name(filename);
+
     FILE *getlabel = fopen(filename, "r");
 
     Buffer *B = buffer_create(sizeof(char));
@@ -88,13 +91,13 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
                 if(!isalpha(word[0]) && word[0] != '_'){
                     errptr = &line[s];
-                    set_error_msg("Invalid label name.");
+                    set_error_msg("Invalid label name in line %d",pos);
                 }
 
                 for(int j = 1; j<l; j++){
                     if( !isalpha(word[j]) && word[0] != '_' && !isdigit(word[j]) ){
                         errptr = &line[s];
-                        set_error_msg("Invalid label name.");
+                        set_error_msg("Invalid label name in line %d",pos);
                     }
                 }
 
@@ -111,7 +114,7 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
                     if(result.new == 0){
                          errptr = &line[s];
-                         set_error_msg("This label already exists");
+                         set_error_msg("Label already exists in line %d",pos);
                     }
 
                     //Procurar o registrador do IS
@@ -125,7 +128,7 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
                     if(line[s]!='$'){
                         errptr = &line[s];
-                        set_error_msg("Missing Register");
+                        set_error_msg("Missing register in line %d",pos);
                     }
 
                     s = s+1;
@@ -141,7 +144,7 @@ int assemble(const char *filename, FILE *input, FILE *output) {
                     for(int j = s; j<e; j++){
                         if(!isdigit(line[j])){ //evitar algo do tipo "$1a"
                             errptr = &line[s];
-                            set_error_msg("Invalid register number.");
+                            set_error_msg("Invalid register number in line %d",pos);
                         }
                         num = num*10 + (line[j] - '0');
                     }
@@ -173,7 +176,7 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
                     if(!ext){
                         errptr = &line[s];
-                        set_error_msg("Defining label before EXTERN");
+                        die("Defining label before EXTERN in line %d",pos);
                     }
 
                     InsertionResult result;
@@ -181,7 +184,7 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
                     if(result.new == 0){
                         errptr = &line[s];
-                        set_error_msg("This label already exists");
+                        die("Label already exists in line %d",pos);
                     }
 
                     stable_find(label_table, word)->i = pos;
@@ -191,20 +194,16 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
         pos++;
     }
-    
-    printf("Nome do programa\n");
-
-    set_prog_name(filename);
 
     printf("Pegar as instruções\n");
 
     // passa por todas as linhas do codigo
     for (int line = 1;; line++) {
 
-        printf("\nLer linha %d\n",line);
-
         if(read_line(input, B) == 0)
         	break;
+
+        printf("\nLer linha %d\n",line);
 
         char *data = (char*)B->data;
 
@@ -270,8 +269,6 @@ int assemble(const char *filename, FILE *input, FILE *output) {
         }
 
     }
-
-    //test printf("Parei de olhar para as linhas, hora de libertar!\n");
 
     // libera as instruções
     Instruction *destroy, *next;
