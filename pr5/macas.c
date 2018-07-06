@@ -582,11 +582,11 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     		else if(!strcmp(name,"JMP")){
     			EntryData *test = stable_find(label_table,ttop->opds[0]->value.label);
     			int i;
-    			if(test = NULL){
+    			if(test == NULL){
     				i = ttop->opds[0]->value.num - line;
     			}
     			else{
-    				i = stable_find(label_table,ttop->opds[0]->value.label)->i - line;
+    				i = test->i - line;
     			}
     			if(i > 0){
     				printf("48");
@@ -600,11 +600,11 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     		else if(!strcmp(name,"JZ")){
     			EntryData *test = stable_find(label_table,ttop->opds[1]->value.label);
     			int i;
-    			if(test = NULL){
+    			if(test == NULL){
     				i = ttop->opds[1]->value.num - line;
     			}
     			else{
-    				i = stable_find(label_table,ttop->opds[1]->value.label)->i - line;
+    				i = test->i - line;
     			}
     			if(i > 0){
     				printf("4a");
