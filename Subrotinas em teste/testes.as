@@ -1,0 +1,3 @@
+PUSH $0
+PUSH $1
+CALL batman

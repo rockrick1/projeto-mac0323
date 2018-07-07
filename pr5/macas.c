@@ -282,14 +282,25 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     }
 
     instr = ttop;
-
-    for(int line = 1; ttop!=NULL; line++){
+    int pushed = 0;
+    for(int line = 1; ttop!=NULL; line++, ttop = ttop->next){
 
     	Operator *op = ttop->op;
+        char* name = op->name;
 
-    	if(strcmp(op->name,"IS") && strcmp(op->name,"EXTERN")){
-    		
-    		char* name = op->name;
+
+        if(!strcmp(op->name,"IS")){
+            continue;
+        }
+
+    	if(strcmp(op->name,"EXTERN") && strcmp(op->name,"STR")
+            && strcmp(op->name,"PUSH") && strcmp(op->name,"CALL") && strcmp(op->name,"RET")){
+
+            if(pushed>0){
+                fprintf(output,"31fdfd%02x\n",pushed);
+                line++;
+                pushed = 0;
+            }
 
     		if(!strcmp(name,"LDB")){
     			if(ttop->opds[2]->type == REGISTER){
@@ -1171,12 +1182,59 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     		else if(!strcmp(name,"NOP")){
     			fprintf(output, "ff000000");
     		}
-
+            fprintf(output, "\n");
 
     	}
+        else{
+            if(!strcmp(name,"PUSH")){
+                fprintf(output,"1f");
 
-    	ttop = ttop->next;
-    	fprintf(output, "\n");
+                if(ttop->opds[0]->type == LABEL){
+                    fprintf(output,"%02x",stable_find(alias_table,ttop->opds[0]->value.label)->i);          
+                }
+                else{
+                    fprintf(output,"%02x",(int)ttop->opds[0]->value.num);
+                }
+                
+                fprintf(output,"fd%02x",pushed);
+                pushed = pushed+8;
+
+                fprintf(output, "\n");
+                continue;
+            }
+
+            if(pushed>0){
+                fprintf(output,"31fdfd%02x\n",pushed);
+                line++;
+                pushed = 0;
+            }
+            
+            if(!strcmp(name,"CALL")){
+                fprintf(output,"58fa0004\n1ffafd00\n31fdfd08");
+                line = line + 3;
+
+                int i;
+                if(ttop->opds[0]->type == LABEL){
+                    i = stable_find(label_table,ttop->opds[0]->value.label)->i - line;      
+                }
+                else{
+                    i = ttop->opds[0]->value.num - line;
+                }
+
+                if(i > 0){
+                    fprintf(output,"48");
+                }
+                else{
+                    fprintf(output,"49");
+                    i = -i;
+                }
+                fprintf("%06x",i);
+            }
+
+            fprintf(output, "\n");
+
+        }
+    	
     }
 
     // libera as instruções
