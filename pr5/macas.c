@@ -293,688 +293,688 @@ int assemble(const char *filename, FILE *input, FILE *output) {
 
     		if(!strcmp(name,"LDB")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("00");
+    				fprintf(output, "00");
     			}
     			else{
-    				printf("01");
+    				fprintf(output, "01");
     			}
     			
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     			
 
     		}
     		else if(!strcmp(name,"LDW")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("02");
+    				fprintf(output, "02");
     			}
     			else{
-    				printf("03");
+    				fprintf(output, "03");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"LDT")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("04");
+    				fprintf(output, "04");
     			}
     			else{
-    				printf("05");
+    				fprintf(output, "05");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"LDO")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("06");
+    				fprintf(output, "06");
     			}
     			else{
-    				printf("07");
+    				fprintf(output, "07");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"LDBU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("08");
+    				fprintf(output, "08");
     			}
     			else{
-    				printf("09");
+    				fprintf(output, "09");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"LDWU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("0a");
+    				fprintf(output, "0a");
     			}
     			else{
-    				printf("0b");
+    				fprintf(output, "0b");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"LDTU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("0c");
+    				fprintf(output, "0c");
     			}
     			else{
-    				printf("0d");
+    				fprintf(output, "0d");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"LDOU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("0e");
+    				fprintf(output, "0e");
     			}
     			else{
-    				printf("0f");
+    				fprintf(output, "0f");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STB")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("10");
+    				fprintf(output, "10");
     			}
     			else{
-    				printf("11");
+    				fprintf(output, "11");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STW")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("12");
+    				fprintf(output, "12");
     			}
     			else{
-    				printf("13");
+    				fprintf(output, "13");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STT")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("14");
+    				fprintf(output, "14");
     			}
     			else{
-    				printf("15");
+    				fprintf(output, "15");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STO")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("16");
+    				fprintf(output, "16");
     			}
     			else{
-    				printf("17");
+    				fprintf(output, "17");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STBU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("18");
+    				fprintf(output, "18");
     			}
     			else{
-    				printf("19");
+    				fprintf(output, "19");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STWU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("1a");
+    				fprintf(output, "1a");
     			}
     			else{
-    				printf("1b");
+    				fprintf(output, "1b");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STTU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("1c");
+    				fprintf(output, "1c");
     			}
     			else{
-    				printf("1d");
+    				fprintf(output, "1d");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"STOU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("1e");
+    				fprintf(output, "1e");
     			}
     			else{
-    				printf("1f");
+    				fprintf(output, "1f");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"ADD")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("20");
+    				fprintf(output, "20");
     			}
     			else{
-    				printf("21");
+    				fprintf(output, "21");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"SUB")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("22");
+    				fprintf(output, "22");
     			}
     			else{
-    				printf("23");
+    				fprintf(output, "23");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"MUL")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("24");
+    				fprintf(output, "24");
     			}
     			else{
-    				printf("25");
+    				fprintf(output, "25");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"DIV")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("26");
+    				fprintf(output, "26");
     			}
     			else{
-    				printf("27");
+    				fprintf(output, "27");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"CMP")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("28");
+    				fprintf(output, "28");
     			}
     			else{
-    				printf("29");
+    				fprintf(output, "29");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"SL")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("2a");
+    				fprintf(output, "2a");
     			}
     			else{
-    				printf("2b");
+    				fprintf(output, "2b");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"SR")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("2c");
+    				fprintf(output, "2c");
     			}
     			else{
-    				printf("2d");
+    				fprintf(output, "2d");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"NEG")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("2e");
+    				fprintf(output, "2e");
     			}
     			else{
-    				printf("2f");
+    				fprintf(output, "2f");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"ADDU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("30");
+    				fprintf(output, "30");
     			}
     			else{
-    				printf("31");
+    				fprintf(output, "31");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"SUBU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("32");
+    				fprintf(output, "32");
     			}
     			else{
-    				printf("33");
+    				fprintf(output, "33");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"MULU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("34");
+    				fprintf(output, "34");
     			}
     			else{
-    				printf("35");
+    				fprintf(output, "35");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"DIVU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("36");
+    				fprintf(output, "36");
     			}
     			else{
-    				printf("37");
+    				fprintf(output, "37");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"CMPU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("38");
+    				fprintf(output, "38");
     			}
     			else{
-    				printf("39");
+    				fprintf(output, "39");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"SLU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("3a");
+    				fprintf(output, "3a");
     			}
     			else{
-    				printf("3b");
+    				fprintf(output, "3b");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"SRU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("3c");
+    				fprintf(output, "3c");
     			}
     			else{
-    				printf("3d");
+    				fprintf(output, "3d");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"NEGU")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("3e");
+    				fprintf(output, "3e");
     			}
     			else{
-    				printf("3f");
+    				fprintf(output, "3f");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"AND")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("40");
+    				fprintf(output, "40");
     			}
     			else{
-    				printf("41");
+    				fprintf(output, "41");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"OR")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("42");
+    				fprintf(output, "42");
     			}
     			else{
-    				printf("43");
+    				fprintf(output, "43");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"XOR")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("44");
+    				fprintf(output, "44");
     			}
     			else{
-    				printf("45");
+    				fprintf(output, "45");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"NXOR")){
     			if(ttop->opds[2]->type == REGISTER){
-    				printf("46");
+    				fprintf(output, "46");
     			}
     			else{
-    				printf("47");
+    				fprintf(output, "47");
     			}
 
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
 				
 
     			if(ttop->opds[2]->type == LABEL){
-    				printf("%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
+    				fprintf(output, "%02x",stable_find(alias_table,ttop->opds[2]->value.label)->i);			
     			}
     			else{
-    				printf("%02x",(int)ttop->opds[2]->value.num);
+    				fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     			}
     		}
     		else if(!strcmp(name,"JMP")){
@@ -987,13 +987,13 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("48");
+    				fprintf(output, "48");
     			}
     			else{
-    				printf("49");
+    				fprintf(output, "49");
     				i = -i;
     			}
-    			printf("%06x",i);
+    			fprintf(output, "%06x",i);
     		}
     		else if(!strcmp(name,"JZ")){
     			int i;
@@ -1005,14 +1005,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("4a");
+    				fprintf(output, "4a");
     			}
     			else{
-    				printf("4b");
+    				fprintf(output, "4b");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"JNZ")){
     			int i;
@@ -1024,14 +1024,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("4c");
+    				fprintf(output, "4c");
     			}
     			else{
-    				printf("4d");
+    				fprintf(output, "4d");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"JP")){
     			int i;
@@ -1043,14 +1043,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("4e");
+    				fprintf(output, "4e");
     			}
     			else{
-    				printf("4f");
+    				fprintf(output, "4f");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"JN")){
     			int i;
@@ -1062,14 +1062,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("50");
+    				fprintf(output, "50");
     			}
     			else{
-    				printf("51");
+    				fprintf(output, "51");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"JNN")){
     			int i;
@@ -1081,14 +1081,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("52");
+    				fprintf(output, "52");
     			}
     			else{
-    				printf("53");
+    				fprintf(output, "53");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"JNP")){
     			int i;
@@ -1100,14 +1100,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("54");
+    				fprintf(output, "54");
     			}
     			else{
-    				printf("55");
+    				fprintf(output, "55");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"GO")){
     			int i;
@@ -1119,14 +1119,14 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("56");
+    				fprintf(output, "56");
     			}
     			else{
-    				printf("57");
+    				fprintf(output, "57");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"GETA")){
     			int i;
@@ -1138,45 +1138,45 @@ int assemble(const char *filename, FILE *input, FILE *output) {
     			}
 
     			if(i > 0){
-    				printf("58");
+    				fprintf(output, "58");
     			}
     			else{
-    				printf("59");
+    				fprintf(output, "59");
     				i = -i;
     			}
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",i);
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",i);
     		}
     		else if(!strcmp(name,"SETW")){
-    			printf("5a");
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%04x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "5a");
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%04x",(int)ttop->opds[1]->value.num);
     		}
     		else if(!strcmp(name,"SAVE")){
-    			printf("5b");
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
-    			printf("%02x",(int)ttop->opds[2]->value.num);
+    			fprintf(output, "5b");
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     		}
     		else if(!strcmp(name,"REST")){
-    			printf("5c");
-    			printf("%02x",(int)ttop->opds[0]->value.num);
-    			printf("%02x",(int)ttop->opds[1]->value.num);
-    			printf("%02x",(int)ttop->opds[2]->value.num);
+    			fprintf(output, "5c");
+    			fprintf(output, "%02x",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[1]->value.num);
+    			fprintf(output, "%02x",(int)ttop->opds[2]->value.num);
     		}
     		else if(!strcmp(name,"INT")){
-    			printf("fe");
-    			printf("%06d",(int)ttop->opds[0]->value.num);
+    			fprintf(output, "fe");
+    			fprintf(output, "%06d",(int)ttop->opds[0]->value.num);
     		}
     		else if(!strcmp(name,"NOP")){
-    			printf("ff000000");
+    			fprintf(output, "ff000000");
     		}
 
 
     	}
 
     	ttop = ttop->next;
-    	printf("\n");
+    	fprintf(output, "\n");
     }
 
     // libera as instruções
