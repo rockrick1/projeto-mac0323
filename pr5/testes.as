@@ -1,3 +1,1 @@
-PUSH $1
-PUSH $2
-ADD	$4,$4,$4
+STR "Hello world!"

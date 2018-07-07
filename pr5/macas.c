@@ -1230,6 +1230,38 @@ int assemble(const char *filename, FILE *input, FILE *output) {
                 }
                 fprintf("%06x",i);
             }
+            else if(!strcmp(name,"RET")){
+                int i = ((int)ttop->opds[0]->value.num) * 8;
+
+                fprintf(output,"33fdfd%02x\n0ffafd%02x\n56fa0000",i+8,i);
+                line = line + 2;
+            }
+            else if(!strcmp(name,"STR")){
+                char* str = ttop->opds[0]->value.str;
+                int c = 0;
+                int cont = 1;
+
+                while(str[c]!='\n' && str[c]!= EOF && str[c] !='\0' && str[c] != '*'){
+                    fprintf(output,"%02x",str[c]);
+                    cont++;
+
+                    if(cont == 5){
+                        line++;
+                        fprintf(output, "\n");
+                        cont = 1;
+                    }
+
+                    c++;
+                }
+
+                while(cont!=1 && cont<5){
+                    fprintf(output,"00");
+                    cont++;
+                }
+            }
+            else if(!strcmp(name,"EXTERN")){
+                fprintf(output, "EXTERN %s",ttop->opds[0]->value.label)
+            }
 
             fprintf(output, "\n");
 
